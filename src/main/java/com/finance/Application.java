@@ -1,9 +1,8 @@
 package com.finance;
 
 import com.finance.database.DatabaseInitializer;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import com.finance.view.DashboardView;
+
 import javafx.stage.Stage;
 
 
@@ -14,23 +13,18 @@ public class Application extends javafx.application.Application {
     public void start(Stage stage) {
 
 
-        System.out.println("Starting Personal Finance Tracker...");
-
-
         DatabaseInitializer.createTables();
 
 
-        Label welcomeLabel = new Label(
-                "Welcome to Personal Finance Tracker"
-        );
+        DashboardView dashboardView = new DashboardView();
 
 
-        StackPane root = new StackPane();
-
-        root.getChildren().add(welcomeLabel);
-
-
-        Scene scene = new Scene(root, 600, 400);
+        javafx.scene.Scene scene =
+                new javafx.scene.Scene(
+                        dashboardView.getView(),
+                        600,
+                        400
+                );
 
 
         stage.setTitle("Personal Finance Tracker");
@@ -44,7 +38,7 @@ public class Application extends javafx.application.Application {
 
     public static void main(String[] args) {
 
-        launch();
+        launch(args);
 
     }
 
