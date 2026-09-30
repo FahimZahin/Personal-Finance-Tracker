@@ -27,6 +27,34 @@ public class DashboardView {
         Button incomeButton = new Button(
                 "Manage Income"
         );
+        incomeButton.setOnAction(event -> {
+
+
+            IncomeView incomeView = new IncomeView();
+
+
+            Stage stage = new Stage();
+
+
+            Scene scene = new Scene(
+                    incomeView.getView(),
+                    500,
+                    500
+            );
+
+
+            stage.setTitle(
+                    "Income"
+            );
+
+
+            stage.setScene(scene);
+
+
+            stage.show();
+
+        });
+
 
 
         Button transactionButton = new Button(
