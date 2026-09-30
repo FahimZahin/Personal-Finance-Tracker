@@ -60,6 +60,35 @@ public class DashboardView {
         Button transactionButton = new Button(
                 "View Transactions"
         );
+        transactionButton.setOnAction(event -> {
+
+
+            TransactionView transactionView =
+                    new TransactionView();
+
+
+            Stage stage = new Stage();
+
+
+            Scene scene = new Scene(
+                    transactionView.getView(),
+                    700,
+                    500
+            );
+
+
+            stage.setTitle(
+                    "Transactions"
+            );
+
+
+            stage.setScene(scene);
+
+
+            stage.show();
+
+
+        });
 
 
         Button logoutButton = new Button(
