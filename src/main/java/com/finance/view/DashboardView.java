@@ -1,9 +1,12 @@
 package com.finance.view;
 
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 
 public class DashboardView {
 
@@ -36,6 +39,40 @@ public class DashboardView {
         );
 
 
+        /*
+         * Open Expense Screen
+         */
+        expenseButton.setOnAction(event -> {
+
+
+            ExpenseView expenseView = new ExpenseView();
+
+
+            Stage stage = new Stage();
+
+
+            Scene scene = new Scene(
+                    expenseView.getView(),
+                    500,
+                    500
+            );
+
+
+            stage.setTitle(
+                    "Expenses"
+            );
+
+
+            stage.setScene(scene);
+
+
+            stage.show();
+
+
+        });
+
+
+
         VBox layout = new VBox(
                 20,
                 title,
@@ -46,7 +83,9 @@ public class DashboardView {
         );
 
 
-        layout.setAlignment(Pos.CENTER);
+        layout.setAlignment(
+                Pos.CENTER
+        );
 
 
         return layout;
