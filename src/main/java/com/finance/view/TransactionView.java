@@ -1,192 +1,286 @@
 package com.finance.view;
 
+
 import com.finance.model.Expense;
 import com.finance.model.Income;
 
 import com.finance.service.ExpenseService;
 import com.finance.service.IncomeService;
 
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+
 import javafx.geometry.Insets;
 
+
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+
 import javafx.scene.control.cell.PropertyValueFactory;
 
+
 import javafx.scene.layout.VBox;
+
 
 
 public class TransactionView {
 
 
+
     private final ExpenseService expenseService;
+
     private final IncomeService incomeService;
 
 
+
     public TransactionView() {
+
 
         expenseService = new ExpenseService();
 
         incomeService = new IncomeService();
 
+
     }
+
+
 
 
 
     public VBox getView() {
 
 
+
         TableView<Object> table = new TableView<>();
 
 
-        TableColumn<Object, String> typeColumn =
+
+        TableColumn<Object,String> typeColumn =
                 new TableColumn<>("Type");
 
 
-        typeColumn.setCellValueFactory(
-                data -> {
 
-                    Object obj = data.getValue();
-
-                    if (obj instanceof Expense) {
-
-                        return new javafx.beans.property.SimpleStringProperty(
-                                "Expense"
-                        );
-
-                    }
-
-                    return new javafx.beans.property.SimpleStringProperty(
-                            "Income"
-                    );
-
-                }
-        );
+        typeColumn.setCellValueFactory(data -> {
 
 
+            if(data.getValue() instanceof Expense){
 
-        TableColumn<Object, Double> amountColumn =
+                return new javafx.beans.property.SimpleStringProperty(
+                        "Expense"
+                );
+
+            }
+
+
+            return new javafx.beans.property.SimpleStringProperty(
+                    "Income"
+            );
+
+
+        });
+
+
+
+
+
+        TableColumn<Object,Double> amountColumn =
                 new TableColumn<>("Amount");
 
 
-        amountColumn.setCellValueFactory(
-                data -> {
 
-                    if (data.getValue() instanceof Expense expense) {
-
-                        return new javafx.beans.property.SimpleObjectProperty<>(
-                                expense.getAmount()
-                        );
-
-                    }
+        amountColumn.setCellValueFactory(data -> {
 
 
-                    Income income =
-                            (Income) data.getValue();
+            if(data.getValue() instanceof Expense expense){
 
 
-                    return new javafx.beans.property.SimpleObjectProperty<>(
-                            income.getAmount()
-                    );
+                return new javafx.beans.property.SimpleObjectProperty<>(
+                        expense.getAmount()
+                );
 
-                }
-        );
+
+            }
+
+
+            Income income =
+                    (Income)data.getValue();
 
 
 
-        TableColumn<Object, String> detailColumn =
+            return new javafx.beans.property.SimpleObjectProperty<>(
+                    income.getAmount()
+            );
+
+
+        });
+
+
+
+
+
+
+        TableColumn<Object,String> detailColumn =
                 new TableColumn<>("Category / Source");
 
 
-        detailColumn.setCellValueFactory(
-                data -> {
 
-
-                    if (data.getValue() instanceof Expense expense) {
-
-                        return new javafx.beans.property.SimpleStringProperty(
-                                expense.getCategory()
-                        );
-
-                    }
-
-
-                    Income income =
-                            (Income) data.getValue();
-
-
-                    return new javafx.beans.property.SimpleStringProperty(
-                            income.getSource()
-                    );
-
-                }
-        );
+        detailColumn.setCellValueFactory(data -> {
 
 
 
-        TableColumn<Object, String> dateColumn =
+            if(data.getValue() instanceof Expense expense){
+
+
+                return new javafx.beans.property.SimpleStringProperty(
+                        expense.getCategory()
+                );
+
+
+            }
+
+
+
+            Income income =
+                    (Income)data.getValue();
+
+
+
+            return new javafx.beans.property.SimpleStringProperty(
+                    income.getSource()
+            );
+
+
+
+        });
+
+
+
+
+
+
+        TableColumn<Object,String> dateColumn =
                 new TableColumn<>("Date");
 
 
-        dateColumn.setCellValueFactory(
-                data -> {
+
+        dateColumn.setCellValueFactory(data -> {
 
 
-                    if (data.getValue() instanceof Expense expense) {
 
-                        return new javafx.beans.property.SimpleStringProperty(
-                                expense.getDate().toString()
-                        );
-
-                    }
+            if(data.getValue() instanceof Expense expense){
 
 
-                    Income income =
-                            (Income) data.getValue();
+                return new javafx.beans.property.SimpleStringProperty(
+                        expense.getDate().toString()
+                );
 
 
-                    return new javafx.beans.property.SimpleStringProperty(
-                            income.getDate().toString()
-                    );
+            }
 
-                }
-        );
+
+
+
+            Income income =
+                    (Income)data.getValue();
+
+
+
+            return new javafx.beans.property.SimpleStringProperty(
+                    income.getDate().toString()
+            );
+
+
+
+        });
+
+
 
 
 
         table.getColumns().addAll(
+
                 typeColumn,
+
                 amountColumn,
+
                 detailColumn,
+
                 dateColumn
+
         );
 
 
 
-        ObservableList<Object> records =
+
+
+
+        ObservableList<Object> data =
                 FXCollections.observableArrayList();
 
 
 
-        records.addAll(
+
+        data.addAll(
                 expenseService.getAllExpenses()
         );
 
 
-        records.addAll(
+
+        data.addAll(
                 incomeService.getAllIncome()
         );
 
 
-        table.setItems(records);
+
+        table.setItems(data);
 
 
 
-        VBox layout = new VBox(
-                table
-        );
+
+
+        Button refreshButton =
+                new Button(
+                        "Refresh"
+                );
+
+
+
+        refreshButton.setOnAction(event -> {
+
+
+            data.clear();
+
+
+            data.addAll(
+                    expenseService.getAllExpenses()
+            );
+
+
+            data.addAll(
+                    incomeService.getAllIncome()
+            );
+
+
+        });
+
+
+
+
+
+        VBox layout =
+                new VBox(
+
+                        15,
+
+                        table,
+
+                        refreshButton
+
+                );
+
 
 
         layout.setPadding(
@@ -194,8 +288,11 @@ public class TransactionView {
         );
 
 
+
         return layout;
 
+
     }
+
 
 }
