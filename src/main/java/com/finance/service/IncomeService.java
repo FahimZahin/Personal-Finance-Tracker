@@ -67,4 +67,18 @@ public class IncomeService {
 
     }
 
+    public double getTotalIncome() {
+
+        double total = 0;
+
+        for (Income income : incomeDAO.getAllIncome()) {
+
+            total += income.getAmount();
+
+        }
+
+        return total;
+
+    }
+
 }

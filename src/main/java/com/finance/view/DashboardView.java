@@ -1,14 +1,36 @@
 package com.finance.view;
 
+import com.finance.service.ExpenseService;
+import com.finance.service.IncomeService;
+
 import javafx.geometry.Pos;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+
 import javafx.scene.layout.VBox;
+
 import javafx.stage.Stage;
 
 
 public class DashboardView {
+
+
+    private final ExpenseService expenseService;
+
+    private final IncomeService incomeService;
+
+
+
+    public DashboardView() {
+
+        expenseService = new ExpenseService();
+
+        incomeService = new IncomeService();
+
+    }
+
 
 
     public VBox getView() {
@@ -19,27 +41,110 @@ public class DashboardView {
         );
 
 
-        Button expenseButton = new Button(
-                "Manage Expenses"
-        );
+        double income =
+                incomeService.getTotalIncome();
 
 
-        Button incomeButton = new Button(
-                "Manage Income"
-        );
-        incomeButton.setOnAction(event -> {
+        double expense =
+                expenseService.getTotalExpense();
 
 
-            IncomeView incomeView = new IncomeView();
+        double balance =
+                income - expense;
+
+
+
+        Label incomeLabel =
+                new Label(
+                        "Total Income: " + income
+                );
+
+
+        Label expenseLabel =
+                new Label(
+                        "Total Expense: " + expense
+                );
+
+
+        Label balanceLabel =
+                new Label(
+                        "Balance: " + balance
+                );
+
+
+
+        Button expenseButton =
+                new Button(
+                        "Manage Expenses"
+                );
+
+
+        Button incomeButton =
+                new Button(
+                        "Manage Income"
+                );
+
+
+        Button transactionButton =
+                new Button(
+                        "View Transactions"
+                );
+
+
+        Button logoutButton =
+                new Button(
+                        "Logout"
+                );
+
+
+
+        expenseButton.setOnAction(event -> {
+
+
+            ExpenseView expenseView =
+                    new ExpenseView();
 
 
             Stage stage = new Stage();
 
 
-            Scene scene = new Scene(
-                    incomeView.getView(),
-                    500,
-                    500
+            stage.setScene(
+                    new Scene(
+                            expenseView.getView(),
+                            500,
+                            500
+                    )
+            );
+
+
+            stage.setTitle(
+                    "Expenses"
+            );
+
+
+            stage.show();
+
+
+        });
+
+
+
+        incomeButton.setOnAction(event -> {
+
+
+            IncomeView incomeView =
+                    new IncomeView();
+
+
+            Stage stage = new Stage();
+
+
+            stage.setScene(
+                    new Scene(
+                            incomeView.getView(),
+                            500,
+                            500
+                    )
             );
 
 
@@ -48,18 +153,13 @@ public class DashboardView {
             );
 
 
-            stage.setScene(scene);
-
-
             stage.show();
+
 
         });
 
 
 
-        Button transactionButton = new Button(
-                "View Transactions"
-        );
         transactionButton.setOnAction(event -> {
 
 
@@ -70,10 +170,12 @@ public class DashboardView {
             Stage stage = new Stage();
 
 
-            Scene scene = new Scene(
-                    transactionView.getView(),
-                    700,
-                    500
+            stage.setScene(
+                    new Scene(
+                            transactionView.getView(),
+                            700,
+                            500
+                    )
             );
 
 
@@ -82,47 +184,6 @@ public class DashboardView {
             );
 
 
-            stage.setScene(scene);
-
-
-            stage.show();
-
-
-        });
-
-
-        Button logoutButton = new Button(
-                "Logout"
-        );
-
-
-        /*
-         * Open Expense Screen
-         */
-        expenseButton.setOnAction(event -> {
-
-
-            ExpenseView expenseView = new ExpenseView();
-
-
-            Stage stage = new Stage();
-
-
-            Scene scene = new Scene(
-                    expenseView.getView(),
-                    500,
-                    500
-            );
-
-
-            stage.setTitle(
-                    "Expenses"
-            );
-
-
-            stage.setScene(scene);
-
-
             stage.show();
 
 
@@ -130,14 +191,18 @@ public class DashboardView {
 
 
 
-        VBox layout = new VBox(
-                20,
-                title,
-                expenseButton,
-                incomeButton,
-                transactionButton,
-                logoutButton
-        );
+        VBox layout =
+                new VBox(
+                        20,
+                        title,
+                        incomeLabel,
+                        expenseLabel,
+                        balanceLabel,
+                        expenseButton,
+                        incomeButton,
+                        transactionButton,
+                        logoutButton
+                );
 
 
         layout.setAlignment(

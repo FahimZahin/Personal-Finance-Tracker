@@ -49,4 +49,18 @@ public class ExpenseService {
 
     }
 
+    public double getTotalExpense() {
+
+        double total = 0;
+
+        for (Expense expense : expenseDAO.getAllExpenses()) {
+
+            total += expense.getAmount();
+
+        }
+
+        return total;
+
+    }
+
 }
