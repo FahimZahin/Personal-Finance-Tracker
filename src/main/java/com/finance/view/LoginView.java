@@ -8,7 +8,7 @@ import com.finance.service.UserService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
-
+import com.finance.Session;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -140,6 +140,9 @@ public class LoginView {
             if(user != null){
 
 
+                Session.setUser(user);
+
+
 
                 DashboardView dashboard =
                         new DashboardView();
@@ -148,26 +151,17 @@ public class LoginView {
 
                 Scene scene =
                         new Scene(
-                                dashboard.getView(),
-                                600,
-                                400
+                                dashboard.getView(stage),
+                                700,
+                                500
                         );
-
 
 
                 stage.setScene(scene);
 
 
-
-                stage.setTitle(
-                        "Dashboard"
-                );
-
-
-
             }
-            else {
-
+            else{
 
 
                 message.setText(
