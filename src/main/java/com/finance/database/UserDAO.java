@@ -1,91 +1,141 @@
 package com.finance.database;
 
+
 import com.finance.model.User;
 
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+
 
 public class UserDAO {
 
 
-    // Register new user
+
     public void addUser(User user) {
 
 
-        String sql = """
-                INSERT INTO users(username, email, password)
-                VALUES (?, ?, ?)
-                """;
+        String sql =
+                "INSERT INTO users(username,email,password) VALUES(?,?,?)";
 
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+        try(Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)){
 
 
-            statement.setString(1, user.getUsername());
 
-            statement.setString(2, user.getEmail());
+            statement.setString(
+                    1,
+                    user.getUsername()
+            );
 
-            statement.setString(3, user.getPassword());
+
+            statement.setString(
+                    2,
+                    user.getEmail()
+            );
+
+
+            statement.setString(
+                    3,
+                    user.getPassword()
+            );
+
 
 
             statement.executeUpdate();
 
 
-            System.out.println("User created successfully.");
+
+            System.out.println(
+                    "User registered successfully."
+            );
 
 
-        } catch (SQLException e) {
 
-            System.out.println("Failed to create user.");
+        }catch(Exception e){
 
             e.printStackTrace();
 
         }
 
+
     }
 
 
 
-    // Find user by email
-    public User getUserByEmail(String email) {
 
 
-        String sql = "SELECT * FROM users WHERE email = ?";
+    public User login(String email, String password){
 
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        String sql =
+                "SELECT * FROM users WHERE email=? AND password=?";
 
 
-            statement.setString(1, email);
+
+        try(Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)){
 
 
-            ResultSet resultSet = statement.executeQuery();
+
+            statement.setString(
+                    1,
+                    email
+            );
 
 
-            if (resultSet.next()) {
+            statement.setString(
+                    2,
+                    password
+            );
 
 
-                User user = new User();
+
+            ResultSet result =
+                    statement.executeQuery();
 
 
-                user.setId(resultSet.getInt("id"));
 
-                user.setUsername(resultSet.getString("username"));
+            if(result.next()){
 
-                user.setEmail(resultSet.getString("email"));
 
-                user.setPassword(resultSet.getString("password"));
+                User user =
+                        new User();
+
+
+
+                user.setId(
+                        result.getInt("id")
+                );
+
+
+                user.setUsername(
+                        result.getString("username")
+                );
+
+
+                user.setEmail(
+                        result.getString("email")
+                );
+
+
+                user.setPassword(
+                        result.getString("password")
+                );
 
 
                 return user;
 
+
             }
 
 
-        } catch (SQLException e) {
 
-            System.out.println("Failed to find user.");
+        }catch(Exception e){
 
             e.printStackTrace();
 
@@ -94,38 +144,9 @@ public class UserDAO {
 
         return null;
 
-    }
-
-
-
-    // Delete user
-    public void deleteUser(int id) {
-
-
-        String sql = "DELETE FROM users WHERE id = ?";
-
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
-
-            statement.setInt(1, id);
-
-
-            statement.executeUpdate();
-
-
-            System.out.println("User deleted successfully.");
-
-
-        } catch (SQLException e) {
-
-            System.out.println("Failed to delete user.");
-
-            e.printStackTrace();
-
-        }
 
     }
+
+
 
 }

@@ -77,6 +77,32 @@ public class LoginView {
                         "Login"
                 );
 
+        Button registerButton =
+                new Button(
+                        "Create Account"
+                );
+
+        registerButton.setOnAction(event -> {
+
+
+            RegisterView registerView =
+                    new RegisterView();
+
+
+
+            Scene scene =
+                    new Scene(
+                            registerView.getView(stage),
+                            500,
+                            400
+                    );
+
+
+            stage.setScene(scene);
+
+
+        });
+
 
 
         Label message =
@@ -172,6 +198,8 @@ public class LoginView {
                         passwordField,
 
                         loginButton,
+
+                        registerButton,
 
                         message
 
