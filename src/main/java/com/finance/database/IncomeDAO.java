@@ -100,27 +100,30 @@ public class IncomeDAO {
 
 
     // Delete income
+
     public void deleteIncome(int id) {
 
 
-        String sql = "DELETE FROM income WHERE id = ?";
+        String sql =
+                "DELETE FROM income WHERE id = ?";
 
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (var connection = DatabaseConnection.getConnection();
+             var statement = connection.prepareStatement(sql)) {
 
 
             statement.setInt(1, id);
 
+
             statement.executeUpdate();
 
 
-            System.out.println("Income deleted successfully.");
+            System.out.println(
+                    "Income deleted successfully."
+            );
 
 
-        } catch (SQLException e) {
-
-            System.out.println("Failed to delete income.");
+        } catch (Exception e) {
 
             e.printStackTrace();
 

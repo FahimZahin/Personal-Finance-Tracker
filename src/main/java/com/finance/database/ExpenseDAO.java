@@ -100,14 +100,16 @@ public class ExpenseDAO {
 
 
     // Delete expense
+
     public void deleteExpense(int id) {
 
 
-        String sql = "DELETE FROM expenses WHERE id = ?";
+        String sql =
+                "DELETE FROM expenses WHERE id = ?";
 
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (var connection = DatabaseConnection.getConnection();
+             var statement = connection.prepareStatement(sql)) {
 
 
             statement.setInt(1, id);
@@ -116,12 +118,12 @@ public class ExpenseDAO {
             statement.executeUpdate();
 
 
-            System.out.println("Expense deleted successfully.");
+            System.out.println(
+                    "Expense deleted successfully."
+            );
 
 
-        } catch (SQLException e) {
-
-            System.out.println("Failed to delete expense.");
+        } catch (Exception e) {
 
             e.printStackTrace();
 

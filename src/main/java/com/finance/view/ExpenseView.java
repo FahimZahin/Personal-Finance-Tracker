@@ -1,5 +1,6 @@
 package com.finance.view;
 
+
 import com.finance.model.Expense;
 import com.finance.service.ExpenseService;
 
@@ -14,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
+
 
 
 public class ExpenseView {
@@ -66,14 +68,22 @@ public class ExpenseView {
         );
 
 
+
         Button saveButton = new Button(
                 "Save Expense"
+        );
+
+
+        Button deleteButton = new Button(
+                "Delete Expense"
         );
 
 
         Label message = new Label();
 
 
+
+        // Save expense
 
         saveButton.setOnAction(event -> {
 
@@ -92,13 +102,16 @@ public class ExpenseView {
 
                 expense.setAmount(amount);
 
+
                 expense.setCategory(
                         categoryField.getText()
                 );
 
+
                 expense.setDescription(
                         descriptionField.getText()
                 );
+
 
                 expense.setDate(
                         datePicker.getValue()
@@ -121,7 +134,7 @@ public class ExpenseView {
 
 
 
-            } catch (Exception e) {
+            } catch(Exception e) {
 
 
                 message.setText(
@@ -136,16 +149,67 @@ public class ExpenseView {
 
 
 
+
+        // Delete expense
+
+        deleteButton.setOnAction(event -> {
+
+
+            try {
+
+
+                int id =
+                        Integer.parseInt(
+                                amountField.getText()
+                        );
+
+
+                expenseService.deleteExpense(id);
+
+
+                message.setText(
+                        "Expense deleted successfully!"
+                );
+
+
+            } catch(Exception e) {
+
+
+                message.setText(
+                        "Invalid ID"
+                );
+
+
+            }
+
+
+        });
+
+
+
+
         VBox layout = new VBox(
+
                 15,
+
                 title,
+
                 amountField,
+
                 categoryField,
+
                 descriptionField,
+
                 datePicker,
+
                 saveButton,
+
+                deleteButton,
+
                 message
+
         );
+
 
 
         layout.setPadding(
@@ -161,5 +225,6 @@ public class ExpenseView {
         return layout;
 
     }
+
 
 }
