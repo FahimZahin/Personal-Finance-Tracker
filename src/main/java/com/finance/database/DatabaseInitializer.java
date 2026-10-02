@@ -1,16 +1,15 @@
 package com.finance.database;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class DatabaseInitializer {
 
 
-    public static void createTables() {
+    public static void createTables(){
 
-        String createUsersTable = """
-                CREATE TABLE IF NOT EXISTS users (
+
+        String users =
+                """
+                CREATE TABLE IF NOT EXISTS users(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT NOT NULL,
                     email TEXT UNIQUE NOT NULL,
@@ -19,50 +18,69 @@ public class DatabaseInitializer {
                 """;
 
 
-        String createExpensesTable = """
-                CREATE TABLE IF NOT EXISTS expenses (
+
+        String expenses =
+                """
+                CREATE TABLE IF NOT EXISTS expenses(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
                     amount REAL NOT NULL,
-                    category TEXT NOT NULL,
+                    category TEXT,
                     description TEXT,
-                    date TEXT NOT NULL
+                    date TEXT,
+                    FOREIGN KEY(user_id) REFERENCES users(id)
                 );
                 """;
 
 
-        String createIncomeTable = """
-                CREATE TABLE IF NOT EXISTS income (
+
+        String income =
+                """
+                CREATE TABLE IF NOT EXISTS income(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
                     amount REAL NOT NULL,
-                    source TEXT NOT NULL,
+                    source TEXT,
                     description TEXT,
-                    date TEXT NOT NULL
+                    date TEXT,
+                    FOREIGN KEY(user_id) REFERENCES users(id)
                 );
                 """;
 
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             Statement statement = connection.createStatement()) {
 
 
-            statement.execute(createUsersTable);
-
-            statement.execute(createExpensesTable);
-
-            statement.execute(createIncomeTable);
+        try(var connection =
+                    DatabaseConnection.getConnection()){
 
 
-            System.out.println("Database tables created successfully.");
+            var statement =
+                    connection.createStatement();
 
 
-        } catch (SQLException e) {
 
-            System.out.println("Failed to create database tables.");
+            statement.execute(users);
+
+            statement.execute(expenses);
+
+            statement.execute(income);
+
+
+
+            System.out.println(
+                    "Database tables created successfully."
+            );
+
+
+        }
+        catch(Exception e){
 
             e.printStackTrace();
 
         }
 
+
     }
+
 
 }

@@ -1,76 +1,118 @@
 package com.finance.model;
 
+
 import java.time.LocalDate;
+
+
 
 public class Expense {
 
+
     private int id;
+
+    private int userId;
+
     private double amount;
+
     private String category;
+
     private String description;
+
     private LocalDate date;
 
-    // Empty constructor
-    public Expense() {
-    }
 
-    // Full constructor
-    public Expense(int id, double amount, String category, String description, LocalDate date) {
-        this.id = id;
-        this.amount = amount;
-        this.category = category;
-        this.description = description;
-        this.date = date;
-    }
 
-    public int getId() {
+    public int getId(){
+
         return id;
+
     }
 
-    public void setId(int id) {
-        this.id = id;
+
+    public void setId(int id){
+
+        this.id=id;
+
     }
 
-    public double getAmount() {
+
+
+    public int getUserId(){
+
+        return userId;
+
+    }
+
+
+    public void setUserId(int userId){
+
+        this.userId=userId;
+
+    }
+
+
+
+
+    public double getAmount(){
+
         return amount;
+
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+
+    public void setAmount(double amount){
+
+        this.amount=amount;
+
     }
 
-    public String getCategory() {
+
+
+
+    public String getCategory(){
+
         return category;
+
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+
+    public void setCategory(String category){
+
+        this.category=category;
+
     }
 
-    public String getDescription() {
+
+
+
+    public String getDescription(){
+
         return description;
+
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+
+    public void setDescription(String description){
+
+        this.description=description;
+
     }
 
-    public LocalDate getDate() {
+
+
+
+    public LocalDate getDate(){
+
         return date;
+
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+
+    public void setDate(LocalDate date){
+
+        this.date=date;
+
     }
 
-    @Override
-    public String toString() {
-        return "Expense{" +
-                "id=" + id +
-                ", amount=" + amount +
-                ", category='" + category + '\'' +
-                ", description='" + description + '\'' +
-                ", date=" + date +
-                '}';
-    }
+
 }

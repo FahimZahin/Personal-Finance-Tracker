@@ -4,11 +4,11 @@ package com.finance.view;
 import com.finance.model.User;
 import com.finance.service.UserService;
 
-
+import com.finance.Session;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
-import com.finance.Session;
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

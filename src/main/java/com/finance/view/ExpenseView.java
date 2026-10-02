@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import com.finance.Session;
 
 import javafx.scene.layout.VBox;
 
@@ -101,6 +102,9 @@ public class ExpenseView {
 
 
                 expense.setAmount(amount);
+                expense.setUserId(
+                        Session.getUser().getId()
+                );
 
 
                 expense.setCategory(

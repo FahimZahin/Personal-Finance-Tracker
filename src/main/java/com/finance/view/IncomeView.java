@@ -3,7 +3,7 @@ package com.finance.view;
 
 import com.finance.model.Income;
 import com.finance.service.IncomeService;
-
+import com.finance.Session;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -127,6 +127,9 @@ public class IncomeView {
 
 
                 income.setAmount(amount);
+                income.setUserId(
+                        Session.getUser().getId()
+                );
 
 
 
