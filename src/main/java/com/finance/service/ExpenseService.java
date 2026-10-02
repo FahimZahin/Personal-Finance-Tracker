@@ -1,66 +1,51 @@
 package com.finance.service;
 
+
 import com.finance.database.ExpenseDAO;
 import com.finance.model.Expense;
 
+
 import java.util.List;
 
+
+
 public class ExpenseService {
+
 
     private final ExpenseDAO expenseDAO;
 
 
-    public ExpenseService() {
-        this.expenseDAO = new ExpenseDAO();
+
+    public ExpenseService(){
+
+        expenseDAO = new ExpenseDAO();
+
     }
 
 
-    // Add expense
-    public void addExpense(Expense expense) {
 
-        if (expense.getAmount() <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than zero.");
-        }
-
-        if (expense.getCategory() == null || expense.getCategory().isEmpty()) {
-            throw new IllegalArgumentException("Category cannot be empty.");
-        }
+    public void addExpense(Expense expense){
 
         expenseDAO.addExpense(expense);
-    }
-
-
-    // Get all expenses
-    public List<Expense> getAllExpenses() {
-
-        return expenseDAO.getAllExpenses();
 
     }
 
 
-    // Delete expense
-    public void deleteExpense(int id) {
 
-        if (id <= 0) {
-            throw new IllegalArgumentException("Invalid expense id.");
-        }
+    public List<Expense> getExpensesByUser(int userId){
+
+        return expenseDAO.getExpensesByUser(userId);
+
+    }
+
+
+
+    public void deleteExpense(int id){
 
         expenseDAO.deleteExpense(id);
 
     }
 
-    public double getTotalExpense() {
 
-        double total = 0;
-
-        for (Expense expense : expenseDAO.getAllExpenses()) {
-
-            total += expense.getAmount();
-
-        }
-
-        return total;
-
-    }
 
 }

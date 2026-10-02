@@ -1,121 +1,232 @@
 package com.finance.database;
 
+
 import com.finance.model.Expense;
 
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+
 import java.time.LocalDate;
+
+
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class ExpenseDAO {
 
 
-    // Add new expense
-    public void addExpense(Expense expense) {
 
-        String sql = """
-                INSERT INTO expenses(amount, category, description, date)
-                VALUES (?, ?, ?, ?)
+    public void addExpense(Expense expense){
+
+
+
+        String sql =
+                """
+                INSERT INTO expenses
+                (user_id, amount, category, description, date)
+                VALUES(?,?,?,?,?)
                 """;
 
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+        try(Connection connection =
+                    DatabaseConnection.getConnection();
+
+            PreparedStatement statement =
+                    connection.prepareStatement(sql)){
 
 
-            statement.setDouble(1, expense.getAmount());
-            statement.setString(2, expense.getCategory());
-            statement.setString(3, expense.getDescription());
-            statement.setString(4, expense.getDate().toString());
+
+            statement.setInt(
+                    1,
+                    expense.getUserId()
+            );
+
+
+            statement.setDouble(
+                    2,
+                    expense.getAmount()
+            );
+
+
+            statement.setString(
+                    3,
+                    expense.getCategory()
+            );
+
+
+            statement.setString(
+                    4,
+                    expense.getDescription()
+            );
+
+
+            statement.setString(
+                    5,
+                    expense.getDate().toString()
+            );
 
 
             statement.executeUpdate();
 
 
-            System.out.println("Expense added successfully.");
+
+            System.out.println(
+                    "Expense added successfully."
+            );
 
 
-        } catch (SQLException e) {
 
-            System.out.println("Failed to add expense.");
+        }
+        catch(Exception e){
 
             e.printStackTrace();
 
         }
 
+
     }
 
 
 
-    // Get all expenses
-    public List<Expense> getAllExpenses() {
-
-        List<Expense> expenses = new ArrayList<>();
-
-        String sql = "SELECT * FROM expenses";
 
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
+
+    public List<Expense> getExpensesByUser(int userId){
 
 
-            while (resultSet.next()) {
+
+        List<Expense> expenses =
+                new ArrayList<>();
 
 
-                Expense expense = new Expense();
+
+        String sql =
+                """
+                SELECT * FROM expenses
+                WHERE user_id = ?
+                """;
 
 
-                expense.setId(resultSet.getInt("id"));
 
-                expense.setAmount(resultSet.getDouble("amount"));
+        try(Connection connection =
+                    DatabaseConnection.getConnection();
 
-                expense.setCategory(resultSet.getString("category"));
+            PreparedStatement statement =
+                    connection.prepareStatement(sql)){
 
-                expense.setDescription(resultSet.getString("description"));
+
+
+            statement.setInt(
+                    1,
+                    userId
+            );
+
+
+
+            ResultSet result =
+                    statement.executeQuery();
+
+
+
+            while(result.next()){
+
+
+
+                Expense expense =
+                        new Expense();
+
+
+
+                expense.setId(
+                        result.getInt("id")
+                );
+
+
+
+                expense.setUserId(
+                        result.getInt("user_id")
+                );
+
+
+
+                expense.setAmount(
+                        result.getDouble("amount")
+                );
+
+
+
+                expense.setCategory(
+                        result.getString("category")
+                );
+
+
+
+                expense.setDescription(
+                        result.getString("description")
+                );
+
+
 
                 expense.setDate(
-                        LocalDate.parse(resultSet.getString("date"))
+                        LocalDate.parse(
+                                result.getString("date")
+                        )
                 );
+
 
 
                 expenses.add(expense);
 
+
+
             }
 
 
-        } catch (SQLException e) {
 
-            System.out.println("Failed to fetch expenses.");
+        }
+        catch(Exception e){
 
             e.printStackTrace();
 
         }
 
 
+
         return expenses;
+
 
     }
 
-
-
-    // Delete expense
-
-    public void deleteExpense(int id) {
+    public void deleteExpense(int id){
 
 
         String sql =
                 "DELETE FROM expenses WHERE id = ?";
 
 
-        try (var connection = DatabaseConnection.getConnection();
-             var statement = connection.prepareStatement(sql)) {
+
+        try(Connection connection =
+                    DatabaseConnection.getConnection();
+
+            PreparedStatement statement =
+                    connection.prepareStatement(sql)){
 
 
-            statement.setInt(1, id);
+
+            statement.setInt(
+                    1,
+                    id
+            );
 
 
             statement.executeUpdate();
+
 
 
             System.out.println(
@@ -123,12 +234,17 @@ public class ExpenseDAO {
             );
 
 
-        } catch (Exception e) {
+
+        }
+        catch(Exception e){
 
             e.printStackTrace();
 
         }
 
+
     }
+
+
 
 }

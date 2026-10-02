@@ -3,6 +3,7 @@ package com.finance.view;
 
 import com.finance.model.Expense;
 import com.finance.model.Income;
+import com.finance.Session;
 
 import com.finance.service.ExpenseService;
 import com.finance.service.IncomeService;
@@ -224,13 +225,17 @@ public class TransactionView {
 
 
         data.addAll(
-                expenseService.getAllExpenses()
+                expenseService.getExpensesByUser(
+                        Session.getUser().getId()
+                )
         );
 
 
 
         data.addAll(
-                incomeService.getAllIncome()
+                incomeService.getIncomeByUser(
+                        Session.getUser().getId()
+                )
         );
 
 
@@ -255,12 +260,16 @@ public class TransactionView {
 
 
             data.addAll(
-                    expenseService.getAllExpenses()
+                    expenseService.getExpensesByUser(
+                            Session.getUser().getId()
+                    )
             );
 
 
             data.addAll(
-                    incomeService.getAllIncome()
+                    incomeService.getIncomeByUser(
+                            Session.getUser().getId()
+                    )
             );
 
 
