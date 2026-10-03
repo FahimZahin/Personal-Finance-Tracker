@@ -205,6 +205,31 @@ public class DashboardView {
 
         });
 
+        Button profileButton =
+                new Button(
+                        "Profile"
+                );
+
+        profileButton.setOnAction(event -> {
+
+
+            ProfileView profileView =
+                    new ProfileView();
+
+
+            Scene scene =
+                    new Scene(
+                            profileView.getView(stage),
+                            500,
+                            400
+                    );
+
+
+            stage.setScene(scene);
+
+
+        });
+
 
 
         logoutButton.setOnAction(event -> {
@@ -252,6 +277,8 @@ public class DashboardView {
                         transactionButton,
 
                         refreshButton,
+
+                        profileButton,
 
                         logoutButton
 
