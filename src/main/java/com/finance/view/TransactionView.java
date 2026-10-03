@@ -2,8 +2,10 @@ package com.finance.view;
 
 
 import com.finance.Session;
+
 import com.finance.model.Expense;
 import com.finance.model.Income;
+
 import com.finance.service.ExpenseService;
 import com.finance.service.IncomeService;
 
@@ -17,6 +19,7 @@ import javafx.geometry.Pos;
 
 
 import javafx.scene.Scene;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -39,6 +42,12 @@ public class TransactionView {
 
 
 
+    private TableView<TransactionRow> table;
+
+    private ObservableList<TransactionRow> data;
+
+
+
     public TransactionView(){
 
 
@@ -49,7 +58,9 @@ public class TransactionView {
         incomeService =
                 new IncomeService();
 
+
     }
+
 
 
 
@@ -58,25 +69,24 @@ public class TransactionView {
     public VBox getView(Stage stage){
 
 
-
-        int userId =
-                Session.getUser().getId();
-
-
-
-        TableView<TransactionRow> table =
+        table =
                 new TableView<>();
 
 
+        data =
+                FXCollections.observableArrayList();
 
 
-        TableColumn<TransactionRow, String> dateColumn =
+
+
+        TableColumn<TransactionRow,String> dateColumn =
                 new TableColumn<>("Date");
 
 
         dateColumn.setCellValueFactory(
                 new PropertyValueFactory<>("date")
         );
+
 
 
 
@@ -90,13 +100,15 @@ public class TransactionView {
 
 
 
+
         TableColumn<TransactionRow,String> detailColumn =
-                new TableColumn<>("Category / Source");
+                new TableColumn<>("Details");
 
 
         detailColumn.setCellValueFactory(
                 new PropertyValueFactory<>("detail")
         );
+
 
 
 
@@ -110,6 +122,7 @@ public class TransactionView {
 
 
 
+
         table.getColumns().addAll(
                 dateColumn,
                 typeColumn,
@@ -119,50 +132,87 @@ public class TransactionView {
 
 
 
-
-        ObservableList<TransactionRow> data =
-                FXCollections.observableArrayList();
-
-
-
-
-        for(Expense expense :
-                expenseService.getExpensesByUser(userId)){
-
-
-            data.add(
-                    new TransactionRow(
-                            expense.getDate().toString(),
-                            "Expense",
-                            expense.getCategory(),
-                            expense.getAmount()
-                    )
-            );
-
-        }
-
-
-
-
-
-        for(Income income :
-                incomeService.getIncomeByUser(userId)){
-
-
-            data.add(
-                    new TransactionRow(
-                            income.getDate().toString(),
-                            "Income",
-                            income.getSource(),
-                            income.getAmount()
-                    )
-            );
-
-        }
-
-
+        loadTransactions();
 
         table.setItems(data);
+
+
+
+
+
+        Button deleteButton =
+                new Button(
+                        "Delete Selected"
+                );
+
+
+
+
+        deleteButton.setOnAction(event -> {
+
+
+            TransactionRow selected =
+                    table.getSelectionModel()
+                            .getSelectedItem();
+
+
+
+            if(selected == null){
+
+                return;
+
+            }
+
+
+
+            if(selected.getType()
+                    .equals("Income")){
+
+
+                incomeService.deleteIncome(
+                        selected.getId()
+                );
+
+
+            }
+            else {
+
+
+                expenseService.deleteExpense(
+                        selected.getId()
+                );
+
+
+            }
+
+
+
+            loadTransactions();
+
+
+        });
+
+
+
+
+
+
+        Button refreshButton =
+                new Button(
+                        "Refresh"
+                );
+
+
+
+        refreshButton.setOnAction(event -> {
+
+
+            loadTransactions();
+
+
+        });
+
+
 
 
 
@@ -192,6 +242,7 @@ public class TransactionView {
                     );
 
 
+
             stage.setScene(scene);
 
 
@@ -210,6 +261,10 @@ public class TransactionView {
 
                         table,
 
+                        deleteButton,
+
+                        refreshButton,
+
                         backButton
 
                 );
@@ -219,7 +274,6 @@ public class TransactionView {
         layout.setPadding(
                 new Insets(20)
         );
-
 
 
         layout.setAlignment(
@@ -233,6 +287,81 @@ public class TransactionView {
 
     }
 
+
+
+
+
+
+
+    private void loadTransactions(){
+
+
+        data.clear();
+
+
+
+        int userId =
+                Session.getUser().getId();
+
+
+
+
+        for(Expense expense :
+                expenseService.getExpensesByUser(userId)){
+
+
+
+            data.add(
+                    new TransactionRow(
+
+                            expense.getId(),
+
+                            expense.getDate().toString(),
+
+                            "Expense",
+
+                            expense.getCategory(),
+
+                            expense.getAmount()
+
+                    )
+            );
+
+
+        }
+
+
+
+
+
+
+        for(Income income :
+                incomeService.getIncomeByUser(userId)){
+
+
+
+            data.add(
+                    new TransactionRow(
+
+                            income.getId(),
+
+                            income.getDate().toString(),
+
+                            "Income",
+
+                            income.getSource(),
+
+                            income.getAmount()
+
+                    )
+            );
+
+
+        }
+
+
+
+    }
 
 
 }

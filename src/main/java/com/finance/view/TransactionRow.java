@@ -4,6 +4,7 @@ package com.finance.view;
 public class TransactionRow {
 
 
+    private int id;
 
     private String date;
 
@@ -15,14 +16,15 @@ public class TransactionRow {
 
 
 
-
     public TransactionRow(
+            int id,
             String date,
             String type,
             String detail,
             double amount
     ){
 
+        this.id = id;
         this.date = date;
         this.type = type;
         this.detail = detail;
@@ -31,6 +33,12 @@ public class TransactionRow {
     }
 
 
+
+    public int getId(){
+
+        return id;
+
+    }
 
 
 
@@ -42,13 +50,11 @@ public class TransactionRow {
 
 
 
-
     public String getType(){
 
         return type;
 
     }
-
 
 
 
@@ -60,12 +66,12 @@ public class TransactionRow {
 
 
 
-
     public double getAmount(){
 
         return amount;
 
     }
+
 
 
 }
