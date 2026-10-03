@@ -3,6 +3,8 @@ package com.finance.view;
 import com.finance.Session;
 import com.finance.service.DashboardService;
 
+import javafx.scene.chart.PieChart;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
@@ -58,6 +60,16 @@ public class DashboardView {
 
         double balance =
                 totalIncome - totalExpense;
+
+        DashboardChart dashboardChart =
+                new DashboardChart();
+
+
+        PieChart chart =
+                dashboardChart.createChart(
+                        totalIncome,
+                        totalExpense
+                );
 
 
 
@@ -270,6 +282,10 @@ public class DashboardView {
 
                         balanceLabel,
 
+                        chart,
+
+                        profileButton,
+
                         expenseButton,
 
                         incomeButton,
@@ -278,11 +294,11 @@ public class DashboardView {
 
                         refreshButton,
 
-                        profileButton,
-
                         logoutButton
 
                 );
+
+
 
 
 
