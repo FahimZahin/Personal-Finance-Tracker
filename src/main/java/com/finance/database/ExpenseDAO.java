@@ -74,6 +74,11 @@ public class ExpenseDAO {
 
             statement.executeUpdate();
 
+            System.out.println(
+                    "Saved expense for user id: "
+                            + expense.getUserId()
+            );
+
 
 
             System.out.println(

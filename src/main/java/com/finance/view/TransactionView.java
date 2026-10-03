@@ -1,10 +1,9 @@
 package com.finance.view;
 
 
+import com.finance.Session;
 import com.finance.model.Expense;
 import com.finance.model.Income;
-import com.finance.Session;
-
 import com.finance.service.ExpenseService;
 import com.finance.service.IncomeService;
 
@@ -14,16 +13,19 @@ import javafx.collections.ObservableList;
 
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-
 import javafx.scene.control.cell.PropertyValueFactory;
 
 
 import javafx.scene.layout.VBox;
+
+import javafx.stage.Stage;
 
 
 
@@ -37,13 +39,15 @@ public class TransactionView {
 
 
 
-    public TransactionView() {
+    public TransactionView(){
 
 
-        expenseService = new ExpenseService();
+        expenseService =
+                new ExpenseService();
 
-        incomeService = new IncomeService();
 
+        incomeService =
+                new IncomeService();
 
     }
 
@@ -51,192 +55,110 @@ public class TransactionView {
 
 
 
-    public VBox getView() {
+    public VBox getView(Stage stage){
 
 
 
-        TableView<Object> table = new TableView<>();
+        int userId =
+                Session.getUser().getId();
 
 
 
-        TableColumn<Object,String> typeColumn =
-                new TableColumn<>("Type");
+        TableView<TransactionRow> table =
+                new TableView<>();
 
 
 
-        typeColumn.setCellValueFactory(data -> {
 
-
-            if(data.getValue() instanceof Expense){
-
-                return new javafx.beans.property.SimpleStringProperty(
-                        "Expense"
-                );
-
-            }
-
-
-            return new javafx.beans.property.SimpleStringProperty(
-                    "Income"
-            );
-
-
-        });
-
-
-
-
-
-        TableColumn<Object,Double> amountColumn =
-                new TableColumn<>("Amount");
-
-
-
-        amountColumn.setCellValueFactory(data -> {
-
-
-            if(data.getValue() instanceof Expense expense){
-
-
-                return new javafx.beans.property.SimpleObjectProperty<>(
-                        expense.getAmount()
-                );
-
-
-            }
-
-
-            Income income =
-                    (Income)data.getValue();
-
-
-
-            return new javafx.beans.property.SimpleObjectProperty<>(
-                    income.getAmount()
-            );
-
-
-        });
-
-
-
-
-
-
-        TableColumn<Object,String> detailColumn =
-                new TableColumn<>("Category / Source");
-
-
-
-        detailColumn.setCellValueFactory(data -> {
-
-
-
-            if(data.getValue() instanceof Expense expense){
-
-
-                return new javafx.beans.property.SimpleStringProperty(
-                        expense.getCategory()
-                );
-
-
-            }
-
-
-
-            Income income =
-                    (Income)data.getValue();
-
-
-
-            return new javafx.beans.property.SimpleStringProperty(
-                    income.getSource()
-            );
-
-
-
-        });
-
-
-
-
-
-
-        TableColumn<Object,String> dateColumn =
+        TableColumn<TransactionRow, String> dateColumn =
                 new TableColumn<>("Date");
 
 
-
-        dateColumn.setCellValueFactory(data -> {
-
-
-
-            if(data.getValue() instanceof Expense expense){
-
-
-                return new javafx.beans.property.SimpleStringProperty(
-                        expense.getDate().toString()
-                );
-
-
-            }
+        dateColumn.setCellValueFactory(
+                new PropertyValueFactory<>("date")
+        );
 
 
 
-
-            Income income =
-                    (Income)data.getValue();
-
+        TableColumn<TransactionRow,String> typeColumn =
+                new TableColumn<>("Type");
 
 
-            return new javafx.beans.property.SimpleStringProperty(
-                    income.getDate().toString()
-            );
+        typeColumn.setCellValueFactory(
+                new PropertyValueFactory<>("type")
+        );
 
 
 
-        });
+        TableColumn<TransactionRow,String> detailColumn =
+                new TableColumn<>("Category / Source");
 
 
+        detailColumn.setCellValueFactory(
+                new PropertyValueFactory<>("detail")
+        );
+
+
+
+        TableColumn<TransactionRow,Double> amountColumn =
+                new TableColumn<>("Amount");
+
+
+        amountColumn.setCellValueFactory(
+                new PropertyValueFactory<>("amount")
+        );
 
 
 
         table.getColumns().addAll(
-
+                dateColumn,
                 typeColumn,
-
-                amountColumn,
-
                 detailColumn,
-
-                dateColumn
-
+                amountColumn
         );
 
 
 
 
-
-
-        ObservableList<Object> data =
+        ObservableList<TransactionRow> data =
                 FXCollections.observableArrayList();
 
 
 
 
-        data.addAll(
-                expenseService.getExpensesByUser(
-                        Session.getUser().getId()
-                )
-        );
+        for(Expense expense :
+                expenseService.getExpensesByUser(userId)){
+
+
+            data.add(
+                    new TransactionRow(
+                            expense.getDate().toString(),
+                            "Expense",
+                            expense.getCategory(),
+                            expense.getAmount()
+                    )
+            );
+
+        }
 
 
 
-        data.addAll(
-                incomeService.getIncomeByUser(
-                        Session.getUser().getId()
-                )
-        );
+
+
+        for(Income income :
+                incomeService.getIncomeByUser(userId)){
+
+
+            data.add(
+                    new TransactionRow(
+                            income.getDate().toString(),
+                            "Income",
+                            income.getSource(),
+                            income.getAmount()
+                    )
+            );
+
+        }
 
 
 
@@ -246,31 +168,31 @@ public class TransactionView {
 
 
 
-        Button refreshButton =
+        Button backButton =
                 new Button(
-                        "Refresh"
+                        "Back to Dashboard"
                 );
 
 
 
-        refreshButton.setOnAction(event -> {
+        backButton.setOnAction(event -> {
 
 
-            data.clear();
+
+            DashboardView dashboardView =
+                    new DashboardView();
 
 
-            data.addAll(
-                    expenseService.getExpensesByUser(
-                            Session.getUser().getId()
-                    )
-            );
+
+            Scene scene =
+                    new Scene(
+                            dashboardView.getView(stage),
+                            600,
+                            500
+                    );
 
 
-            data.addAll(
-                    incomeService.getIncomeByUser(
-                            Session.getUser().getId()
-                    )
-            );
+            stage.setScene(scene);
 
 
         });
@@ -279,14 +201,16 @@ public class TransactionView {
 
 
 
+
+
         VBox layout =
                 new VBox(
 
-                        15,
+                        20,
 
                         table,
 
-                        refreshButton
+                        backButton
 
                 );
 
@@ -298,10 +222,17 @@ public class TransactionView {
 
 
 
+        layout.setAlignment(
+                Pos.CENTER
+        );
+
+
+
         return layout;
 
 
     }
+
 
 
 }

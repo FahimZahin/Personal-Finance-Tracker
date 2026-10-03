@@ -4,16 +4,23 @@ package com.finance.view;
 import com.finance.model.Expense;
 import com.finance.service.ExpenseService;
 
+import com.finance.Session;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import com.finance.Session;
+
 
 import javafx.scene.layout.VBox;
+
+
+import javafx.stage.Stage;
+
 
 import java.time.LocalDate;
 
@@ -22,47 +29,71 @@ import java.time.LocalDate;
 public class ExpenseView {
 
 
+
     private final ExpenseService expenseService;
 
 
-    public ExpenseView() {
 
-        expenseService = new ExpenseService();
+
+    public ExpenseView(){
+
+        expenseService =
+                new ExpenseService();
 
     }
 
 
 
-    public VBox getView() {
 
 
-        Label title = new Label(
-                "Add Expense"
-        );
+    public VBox getView(Stage stage){
 
 
-        TextField amountField = new TextField();
+
+        Label title =
+                new Label(
+                        "Add Expense"
+                );
+
+
+
+
+        TextField amountField =
+                new TextField();
+
 
         amountField.setPromptText(
                 "Amount"
         );
 
 
-        TextField categoryField = new TextField();
+
+
+        TextField categoryField =
+                new TextField();
+
 
         categoryField.setPromptText(
                 "Category"
         );
 
 
-        TextField descriptionField = new TextField();
+
+
+        TextField descriptionField =
+                new TextField();
+
 
         descriptionField.setPromptText(
                 "Description"
         );
 
 
-        DatePicker datePicker = new DatePicker();
+
+
+        DatePicker datePicker =
+                new DatePicker();
+
 
         datePicker.setValue(
                 LocalDate.now()
@@ -70,21 +101,23 @@ public class ExpenseView {
 
 
 
-        Button saveButton = new Button(
-                "Save Expense"
-        );
 
 
-        Button deleteButton = new Button(
-                "Delete Expense"
-        );
-
-
-        Label message = new Label();
+        Label message =
+                new Label();
 
 
 
-        // Save expense
+
+
+        Button saveButton =
+                new Button(
+                        "Save Expense"
+                );
+
+
+
+
 
         saveButton.setOnAction(event -> {
 
@@ -98,13 +131,16 @@ public class ExpenseView {
                         );
 
 
-                Expense expense = new Expense();
+
+                Expense expense =
+                        new Expense();
 
 
-                expense.setAmount(amount);
-                expense.setUserId(
-                        Session.getUser().getId()
+
+                expense.setAmount(
+                        amount
                 );
+
 
 
                 expense.setCategory(
@@ -112,22 +148,33 @@ public class ExpenseView {
                 );
 
 
+
                 expense.setDescription(
                         descriptionField.getText()
                 );
+
 
 
                 expense.setDate(
                         datePicker.getValue()
                 );
 
+                expense.setUserId(
+                        Session.getUser().getId()
+                );
 
-                expenseService.addExpense(expense);
+
+
+                expenseService.addExpense(
+                        expense
+                );
+
 
 
                 message.setText(
                         "Expense saved successfully!"
                 );
+
 
 
                 amountField.clear();
@@ -138,7 +185,8 @@ public class ExpenseView {
 
 
 
-            } catch(Exception e) {
+            }
+            catch(Exception e){
 
 
                 message.setText(
@@ -154,7 +202,17 @@ public class ExpenseView {
 
 
 
-        // Delete expense
+
+
+
+        Button deleteButton =
+                new Button(
+                        "Delete Expense"
+                );
+
+
+
+
 
         deleteButton.setOnAction(event -> {
 
@@ -168,7 +226,11 @@ public class ExpenseView {
                         );
 
 
-                expenseService.deleteExpense(id);
+
+                expenseService.deleteExpense(
+                        id
+                );
+
 
 
                 message.setText(
@@ -176,7 +238,9 @@ public class ExpenseView {
                 );
 
 
-            } catch(Exception e) {
+
+            }
+            catch(Exception e){
 
 
                 message.setText(
@@ -187,32 +251,83 @@ public class ExpenseView {
             }
 
 
+
         });
 
 
 
 
-        VBox layout = new VBox(
 
-                15,
 
-                title,
 
-                amountField,
+        Button backButton =
+                new Button(
+                        "Back to Dashboard"
+                );
 
-                categoryField,
 
-                descriptionField,
 
-                datePicker,
 
-                saveButton,
 
-                deleteButton,
+        backButton.setOnAction(event -> {
 
-                message
 
-        );
+
+            DashboardView dashboardView =
+                    new DashboardView();
+
+
+            Scene scene =
+                    new Scene(
+                            dashboardView.getView(stage),
+                            700,
+                            500
+                    );
+
+
+            stage.setScene(scene);
+
+
+
+            stage.setScene(
+                    scene
+            );
+
+
+        });
+
+
+
+
+
+
+
+        VBox layout =
+                new VBox(
+
+                        15,
+
+                        title,
+
+                        amountField,
+
+                        categoryField,
+
+                        descriptionField,
+
+                        datePicker,
+
+                        saveButton,
+
+                        deleteButton,
+
+                        backButton,
+
+                        message
+
+                );
+
+
 
 
 
@@ -221,12 +336,15 @@ public class ExpenseView {
         );
 
 
+
         layout.setAlignment(
                 Pos.CENTER
         );
 
 
+
         return layout;
+
 
     }
 

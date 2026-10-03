@@ -3,14 +3,11 @@ package com.finance.database;
 
 import com.finance.model.Income;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-
 import java.time.LocalDate;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,26 +17,28 @@ import java.util.List;
 public class IncomeDAO {
 
 
+    // ============================
+    // ADD INCOME
+    // ============================
 
-    public void addIncome(Income income){
-
+    public void addIncome(Income income) {
 
 
         String sql =
                 """
                 INSERT INTO income
                 (user_id, amount, source, description, date)
-                VALUES(?,?,?,?,?)
+                VALUES (?, ?, ?, ?, ?)
                 """;
 
 
+        try (
+                Connection connection =
+                        DatabaseConnection.getConnection();
 
-        try(Connection connection =
-                    DatabaseConnection.getConnection();
-
-            PreparedStatement statement =
-                    connection.prepareStatement(sql)){
-
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
 
 
             statement.setInt(
@@ -72,9 +71,12 @@ public class IncomeDAO {
             );
 
 
-
             statement.executeUpdate();
 
+            System.out.println(
+                    "Saved income for user id: "
+                            + income.getUserId()
+            );
 
 
             System.out.println(
@@ -82,45 +84,45 @@ public class IncomeDAO {
             );
 
 
-
-        }
-        catch(Exception e){
+        } catch (Exception e) {
 
             e.printStackTrace();
 
         }
-
 
     }
 
 
 
 
+    // ============================
+    // GET INCOME BY USER
+    // ============================
 
 
-    public List<Income> getIncomeByUser(int userId){
-
+    public List<Income> getIncomeByUser(int userId) {
 
 
         List<Income> incomes =
                 new ArrayList<>();
 
 
-
         String sql =
                 """
-                SELECT * FROM income
+                SELECT *
+                FROM income
                 WHERE user_id = ?
                 """;
 
 
 
-        try(Connection connection =
-                    DatabaseConnection.getConnection();
+        try (
+                Connection connection =
+                        DatabaseConnection.getConnection();
 
-            PreparedStatement statement =
-                    connection.prepareStatement(sql)){
-
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
 
 
             statement.setInt(
@@ -129,14 +131,12 @@ public class IncomeDAO {
             );
 
 
-
             ResultSet result =
                     statement.executeQuery();
 
 
 
-            while(result.next()){
-
+            while(result.next()) {
 
 
                 Income income =
@@ -176,16 +176,14 @@ public class IncomeDAO {
                 );
 
 
+
                 incomes.add(income);
-
-
 
             }
 
 
 
-        }
-        catch(Exception e){
+        } catch(Exception e) {
 
             e.printStackTrace();
 
@@ -195,23 +193,38 @@ public class IncomeDAO {
 
         return incomes;
 
-
     }
 
-    public void deleteIncome(int id){
+
+
+
+
+
+    // ============================
+    // DELETE INCOME
+    // ============================
+
+
+    public void deleteIncome(int id) {
 
 
         String sql =
-                "DELETE FROM income WHERE id = ?";
+                """
+                DELETE FROM income
+                WHERE id = ?
+                """;
 
 
 
-        try(Connection connection =
-                    DatabaseConnection.getConnection();
+        try(
+                Connection connection =
+                        DatabaseConnection.getConnection();
 
-            PreparedStatement statement =
-                    connection.prepareStatement(sql)){
 
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+
+        ) {
 
 
             statement.setInt(
@@ -220,18 +233,116 @@ public class IncomeDAO {
             );
 
 
+            int rows =
+                    statement.executeUpdate();
+
+
+
+            if(rows > 0) {
+
+                System.out.println(
+                        "Income deleted successfully."
+                );
+
+            }
+            else {
+
+                System.out.println(
+                        "Income ID not found."
+                );
+
+            }
+
+
+
+        } catch(Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+
+    }
+
+
+
+
+
+
+
+    // ============================
+    // UPDATE INCOME
+    // ============================
+
+
+    public void updateIncome(Income income) {
+
+
+        String sql =
+                """
+                UPDATE income
+                SET amount = ?,
+                    source = ?,
+                    description = ?,
+                    date = ?
+                WHERE id = ?
+                """;
+
+
+
+        try(
+                Connection connection =
+                        DatabaseConnection.getConnection();
+
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+
+        ) {
+
+
+            statement.setDouble(
+                    1,
+                    income.getAmount()
+            );
+
+
+            statement.setString(
+                    2,
+                    income.getSource()
+            );
+
+
+            statement.setString(
+                    3,
+                    income.getDescription()
+            );
+
+
+            statement.setString(
+                    4,
+                    income.getDate().toString()
+            );
+
+
+            statement.setInt(
+                    5,
+                    income.getId()
+            );
+
+
+
             statement.executeUpdate();
 
 
 
             System.out.println(
-                    "Income deleted successfully."
+                    "Income updated successfully."
             );
 
 
 
-        }
-        catch(Exception e){
+        } catch(Exception e) {
 
             e.printStackTrace();
 

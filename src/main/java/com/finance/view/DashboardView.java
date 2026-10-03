@@ -1,46 +1,63 @@
 package com.finance.view;
 
-
 import com.finance.Session;
 import com.finance.service.DashboardService;
 
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-
 import javafx.stage.Stage;
-
 
 
 public class DashboardView {
 
-
     private final DashboardService dashboardService;
 
 
-
-    public DashboardView(){
+    public DashboardView() {
 
         dashboardService = new DashboardService();
 
     }
 
 
+    public VBox getView(Stage stage) {
 
 
-    public VBox getView(Stage stage){
+        if (Session.getUser() == null) {
 
+            Label error =
+                    new Label("No user logged in.");
+
+            VBox layout =
+                    new VBox(
+                            error
+                    );
+
+            layout.setAlignment(Pos.CENTER);
+
+            return layout;
+        }
 
 
         int userId =
                 Session.getUser().getId();
 
+
+        double totalIncome =
+                dashboardService.getTotalIncome(userId);
+
+
+        double totalExpense =
+                dashboardService.getTotalExpense(userId);
+
+
+        double balance =
+                totalIncome - totalExpense;
 
 
 
@@ -52,30 +69,27 @@ public class DashboardView {
                 );
 
 
-
         Label incomeLabel =
                 new Label(
                         "Total Income: "
                                 +
-                                dashboardService.getTotalIncome(userId)
+                                totalIncome
                 );
-
 
 
         Label expenseLabel =
                 new Label(
                         "Total Expense: "
                                 +
-                                dashboardService.getTotalExpense(userId)
+                                totalExpense
                 );
-
 
 
         Label balanceLabel =
                 new Label(
                         "Balance: "
                                 +
-                                dashboardService.getBalance(userId)
+                                balance
                 );
 
 
@@ -98,12 +112,16 @@ public class DashboardView {
                 );
 
 
+        Button refreshButton =
+                new Button(
+                        "Refresh Dashboard"
+                );
+
+
         Button logoutButton =
                 new Button(
                         "Logout"
                 );
-
-
 
 
 
@@ -114,23 +132,18 @@ public class DashboardView {
                     new ExpenseView();
 
 
-
             Scene scene =
                     new Scene(
-                            expenseView.getView(),
+                            expenseView.getView(stage),
                             500,
                             500
                     );
-
 
 
             stage.setScene(scene);
 
 
         });
-
-
-
 
 
 
@@ -141,24 +154,18 @@ public class DashboardView {
                     new IncomeView();
 
 
-
             Scene scene =
                     new Scene(
-                            incomeView.getView(),
+                            incomeView.getView(stage),
                             500,
                             500
                     );
-
 
 
             stage.setScene(scene);
 
 
         });
-
-
-
-
 
 
 
@@ -169,14 +176,12 @@ public class DashboardView {
                     new TransactionView();
 
 
-
             Scene scene =
                     new Scene(
-                            transactionView.getView(),
+                            transactionView.getView(stage),
                             700,
                             500
                     );
-
 
 
             stage.setScene(scene);
@@ -186,21 +191,30 @@ public class DashboardView {
 
 
 
+        refreshButton.setOnAction(event -> {
 
+
+            stage.setScene(
+                    new Scene(
+                            new DashboardView().getView(stage),
+                            500,
+                            500
+                    )
+            );
+
+
+        });
 
 
 
         logoutButton.setOnAction(event -> {
 
 
-
             Session.clear();
-
 
 
             LoginView loginView =
                     new LoginView();
-
 
 
             Scene scene =
@@ -211,16 +225,10 @@ public class DashboardView {
                     );
 
 
-
             stage.setScene(scene);
 
 
-
         });
-
-
-
-
 
 
 
@@ -243,10 +251,11 @@ public class DashboardView {
 
                         transactionButton,
 
+                        refreshButton,
+
                         logoutButton
 
                 );
-
 
 
 
@@ -255,17 +264,13 @@ public class DashboardView {
         );
 
 
-
         layout.setAlignment(
                 Pos.CENTER
         );
 
 
-
         return layout;
 
-
     }
-
 
 }

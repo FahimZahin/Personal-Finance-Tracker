@@ -9,6 +9,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -40,7 +43,7 @@ public class IncomeView {
 
 
 
-    public VBox getView() {
+    public VBox getView(Stage stage) {
 
 
 
@@ -97,6 +100,31 @@ public class IncomeView {
                 "Delete Income"
         );
 
+        Button backButton = new Button(
+                "Back to Dashboard"
+        );
+
+
+        backButton.setOnAction(event -> {
+
+
+            DashboardView dashboardView =
+                    new DashboardView();
+
+
+            Scene scene =
+                    new Scene(
+                            dashboardView.getView(stage),
+                            700,
+                            500
+                    );
+
+
+            stage.setScene(scene);
+
+
+        });
+
 
 
         Label message = new Label();
@@ -147,6 +175,10 @@ public class IncomeView {
 
                 income.setDate(
                         datePicker.getValue()
+                );
+
+                income.setUserId(
+                        Session.getUser().getId()
                 );
 
 
@@ -241,35 +273,16 @@ public class IncomeView {
 
 
         VBox layout = new VBox(
-
-
                 15,
-
-
                 title,
-
-
                 amountField,
-
-
                 sourceField,
-
-
                 descriptionField,
-
-
                 datePicker,
-
-
                 saveButton,
-
-
                 deleteButton,
-
-
+                backButton,
                 message
-
-
         );
 
 

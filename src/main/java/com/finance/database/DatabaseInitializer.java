@@ -25,9 +25,9 @@ public class DatabaseInitializer {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user_id INTEGER NOT NULL,
                     amount REAL NOT NULL,
-                    category TEXT,
+                    category TEXT NOT NULL,
                     description TEXT,
-                    date TEXT,
+                    date TEXT NOT NULL,
                     FOREIGN KEY(user_id) REFERENCES users(id)
                 );
                 """;
@@ -40,9 +40,9 @@ public class DatabaseInitializer {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user_id INTEGER NOT NULL,
                     amount REAL NOT NULL,
-                    source TEXT,
+                    source TEXT NOT NULL,
                     description TEXT,
-                    date TEXT,
+                    date TEXT NOT NULL,
                     FOREIGN KEY(user_id) REFERENCES users(id)
                 );
                 """;
@@ -50,13 +50,13 @@ public class DatabaseInitializer {
 
 
 
-        try(var connection =
-                    DatabaseConnection.getConnection()){
+        try(
+                var connection =
+                        DatabaseConnection.getConnection();
 
-
-            var statement =
-                    connection.createStatement();
-
+                var statement =
+                        connection.createStatement()
+        ){
 
 
             statement.execute(users);
