@@ -6,6 +6,7 @@ import com.finance.Session;
 import com.finance.model.Expense;
 import com.finance.model.Income;
 
+import com.finance.service.CsvExportService;
 import com.finance.service.ExpenseService;
 import com.finance.service.IncomeService;
 
@@ -20,26 +21,36 @@ import javafx.geometry.Pos;
 
 import javafx.scene.Scene;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+
 import javafx.scene.control.cell.PropertyValueFactory;
 
 
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+
+
+import java.io.File;
+
+import java.time.LocalDate;
 
 
 
 public class TransactionView {
 
 
-
     private final ExpenseService expenseService;
 
     private final IncomeService incomeService;
 
+    private final CsvExportService csvExportService;
 
 
     private TableView<TransactionRow> table;
@@ -48,7 +59,7 @@ public class TransactionView {
 
 
 
-    public TransactionView(){
+    public TransactionView() {
 
 
         expenseService =
@@ -59,14 +70,15 @@ public class TransactionView {
                 new IncomeService();
 
 
+        csvExportService =
+                new CsvExportService();
+
     }
 
 
 
 
-
-
-    public VBox getView(Stage stage){
+    public VBox getView(Stage stage) {
 
 
         table =
@@ -78,48 +90,59 @@ public class TransactionView {
 
 
 
-
-        TableColumn<TransactionRow,String> dateColumn =
-                new TableColumn<>("Date");
+        TableColumn<TransactionRow, String> dateColumn =
+                new TableColumn<>(
+                        "Date"
+                );
 
 
         dateColumn.setCellValueFactory(
-                new PropertyValueFactory<>("date")
+                new PropertyValueFactory<>(
+                        "date"
+                )
         );
 
 
 
-
-        TableColumn<TransactionRow,String> typeColumn =
-                new TableColumn<>("Type");
+        TableColumn<TransactionRow, String> typeColumn =
+                new TableColumn<>(
+                        "Type"
+                );
 
 
         typeColumn.setCellValueFactory(
-                new PropertyValueFactory<>("type")
+                new PropertyValueFactory<>(
+                        "type"
+                )
         );
 
 
 
-
-        TableColumn<TransactionRow,String> detailColumn =
-                new TableColumn<>("Details");
+        TableColumn<TransactionRow, String> detailColumn =
+                new TableColumn<>(
+                        "Details"
+                );
 
 
         detailColumn.setCellValueFactory(
-                new PropertyValueFactory<>("detail")
+                new PropertyValueFactory<>(
+                        "detail"
+                )
         );
 
 
 
-
-        TableColumn<TransactionRow,Double> amountColumn =
-                new TableColumn<>("Amount");
+        TableColumn<TransactionRow, Double> amountColumn =
+                new TableColumn<>(
+                        "Amount"
+                );
 
 
         amountColumn.setCellValueFactory(
-                new PropertyValueFactory<>("amount")
+                new PropertyValueFactory<>(
+                        "amount"
+                )
         );
-
 
 
 
@@ -132,19 +155,31 @@ public class TransactionView {
 
 
 
+        dateColumn.setPrefWidth(130);
+
+        typeColumn.setPrefWidth(120);
+
+        detailColumn.setPrefWidth(220);
+
+        amountColumn.setPrefWidth(120);
+
+
+
         loadTransactions();
+
 
         table.setItems(data);
 
 
 
-
+        // ============================
+        // DELETE BUTTON
+        // ============================
 
         Button deleteButton =
                 new Button(
                         "Delete Selected"
                 );
-
 
 
 
@@ -157,7 +192,15 @@ public class TransactionView {
 
 
 
-            if(selected == null){
+            if (selected == null) {
+
+
+                showAlert(
+                        Alert.AlertType.WARNING,
+                        "No Selection",
+                        "Please select a transaction first."
+                );
+
 
                 return;
 
@@ -165,8 +208,10 @@ public class TransactionView {
 
 
 
-            if(selected.getType()
-                    .equals("Income")){
+            if (
+                    selected.getType()
+                            .equals("Income")
+            ) {
 
 
                 incomeService.deleteIncome(
@@ -182,7 +227,6 @@ public class TransactionView {
                         selected.getId()
                 );
 
-
             }
 
 
@@ -194,8 +238,9 @@ public class TransactionView {
 
 
 
-
-
+        // ============================
+        // REFRESH BUTTON
+        // ============================
 
         Button refreshButton =
                 new Button(
@@ -214,9 +259,30 @@ public class TransactionView {
 
 
 
+        // ============================
+        // EXPORT CSV BUTTON
+        // ============================
+
+        Button exportButton =
+                new Button(
+                        "Export CSV"
+                );
 
 
 
+        exportButton.setOnAction(event -> {
+
+
+            exportTransactions(stage);
+
+
+        });
+
+
+
+        // ============================
+        // BACK BUTTON
+        // ============================
 
         Button backButton =
                 new Button(
@@ -226,7 +292,6 @@ public class TransactionView {
 
 
         backButton.setOnAction(event -> {
-
 
 
             DashboardView dashboardView =
@@ -250,9 +315,36 @@ public class TransactionView {
 
 
 
+        // ============================
+        // BUTTON LAYOUT
+        // ============================
+
+        HBox buttonLayout =
+                new HBox(
+
+                        10,
+
+                        deleteButton,
+
+                        refreshButton,
+
+                        exportButton,
+
+                        backButton
+
+                );
 
 
 
+        buttonLayout.setAlignment(
+                Pos.CENTER
+        );
+
+
+
+        // ============================
+        // MAIN LAYOUT
+        // ============================
 
         VBox layout =
                 new VBox(
@@ -261,11 +353,7 @@ public class TransactionView {
 
                         table,
 
-                        deleteButton,
-
-                        refreshButton,
-
-                        backButton
+                        buttonLayout
 
                 );
 
@@ -276,6 +364,7 @@ public class TransactionView {
         );
 
 
+
         layout.setAlignment(
                 Pos.CENTER
         );
@@ -284,16 +373,16 @@ public class TransactionView {
 
         return layout;
 
-
     }
 
 
 
 
+    // ============================
+    // LOAD TRANSACTIONS
+    // ============================
 
-
-
-    private void loadTransactions(){
+    private void loadTransactions() {
 
 
         data.clear();
@@ -305,10 +394,12 @@ public class TransactionView {
 
 
 
-
-        for(Expense expense :
-                expenseService.getExpensesByUser(userId)){
-
+        for (
+                Expense expense :
+                expenseService.getExpensesByUser(
+                        userId
+                )
+        ) {
 
 
             data.add(
@@ -332,12 +423,12 @@ public class TransactionView {
 
 
 
-
-
-
-        for(Income income :
-                incomeService.getIncomeByUser(userId)){
-
+        for (
+                Income income :
+                incomeService.getIncomeByUser(
+                        userId
+                )
+        ) {
 
 
             data.add(
@@ -359,7 +450,155 @@ public class TransactionView {
 
         }
 
+    }
 
+
+
+
+    // ============================
+    // EXPORT TRANSACTIONS
+    // ============================
+
+    private void exportTransactions(Stage stage) {
+
+
+        if (data.isEmpty()) {
+
+
+            showAlert(
+                    Alert.AlertType.INFORMATION,
+                    "No Transactions",
+                    "There are no transactions to export."
+            );
+
+
+            return;
+
+        }
+
+
+
+        FileChooser fileChooser =
+                new FileChooser();
+
+
+
+        fileChooser.setTitle(
+                "Save Transactions"
+        );
+
+
+
+        fileChooser.setInitialFileName(
+                "transactions.csv"
+        );
+
+
+
+        FileChooser.ExtensionFilter csvFilter =
+                new FileChooser.ExtensionFilter(
+                        "CSV Files (*.csv)",
+                        "*.csv"
+                );
+
+
+
+        fileChooser.getExtensionFilters()
+                .add(csvFilter);
+
+
+
+        File file =
+                fileChooser.showSaveDialog(stage);
+
+
+
+        if (file == null) {
+
+            return;
+
+        }
+
+
+
+        if (
+                !file.getName()
+                        .toLowerCase()
+                        .endsWith(".csv")
+        ) {
+
+
+            file =
+                    new File(
+                            file.getAbsolutePath()
+                                    + ".csv"
+                    );
+
+        }
+
+
+
+        try {
+
+
+            csvExportService.exportTransactions(
+                    data,
+                    file
+            );
+
+
+            showAlert(
+                    Alert.AlertType.INFORMATION,
+                    "Export Successful",
+                    "Transactions exported successfully.\n\n"
+                            +
+                            file.getAbsolutePath()
+            );
+
+
+        }
+        catch(Exception e) {
+
+
+            e.printStackTrace();
+
+
+            showAlert(
+                    Alert.AlertType.ERROR,
+                    "Export Failed",
+                    "Could not export transactions."
+            );
+
+        }
+
+    }
+
+
+
+
+    // ============================
+    // ALERT
+    // ============================
+
+    private void showAlert(
+            Alert.AlertType type,
+            String title,
+            String message
+    ) {
+
+
+        Alert alert =
+                new Alert(type);
+
+
+        alert.setTitle(title);
+
+        alert.setHeaderText(null);
+
+        alert.setContentText(message);
+
+
+        alert.showAndWait();
 
     }
 

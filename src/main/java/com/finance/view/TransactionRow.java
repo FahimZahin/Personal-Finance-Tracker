@@ -22,19 +22,25 @@ public class TransactionRow {
             String type,
             String detail,
             double amount
-    ){
+    ) {
+
 
         this.id = id;
+
         this.date = date;
+
         this.type = type;
+
         this.detail = detail;
+
         this.amount = amount;
 
     }
 
 
 
-    public int getId(){
+
+    public int getId() {
 
         return id;
 
@@ -42,7 +48,8 @@ public class TransactionRow {
 
 
 
-    public String getDate(){
+
+    public String getDate() {
 
         return date;
 
@@ -50,7 +57,8 @@ public class TransactionRow {
 
 
 
-    public String getType(){
+
+    public String getType() {
 
         return type;
 
@@ -58,7 +66,8 @@ public class TransactionRow {
 
 
 
-    public String getDetail(){
+
+    public String getDetail() {
 
         return detail;
 
@@ -66,12 +75,12 @@ public class TransactionRow {
 
 
 
-    public double getAmount(){
+
+    public double getAmount() {
 
         return amount;
 
     }
-
 
 
 }
