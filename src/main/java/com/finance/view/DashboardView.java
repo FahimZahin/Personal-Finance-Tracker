@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 import javafx.scene.Scene;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
@@ -19,27 +20,35 @@ import javafx.stage.Stage;
 
 import java.util.Locale;
 
+
 public class DashboardView {
+
 
     private final DashboardService dashboardService;
 
+
     public DashboardView() {
 
-        dashboardService = new DashboardService();
+        dashboardService =
+                new DashboardService();
     }
+
 
     public VBox getView(Stage stage) {
 
+
         // ==========================================
-        // CHECK SESSION
+        // SESSION CHECK
         // ==========================================
 
         if (Session.getUser() == null) {
 
-            LoginView loginView = new LoginView();
+            LoginView loginView =
+                    new LoginView();
 
             return loginView.getView(stage);
         }
+
 
         // ==========================================
         // USER INFORMATION
@@ -48,24 +57,33 @@ public class DashboardView {
         int userId =
                 Session.getUser().getId();
 
+
         String username =
                 Session.getUser().getUsername();
 
+
         // ==========================================
-        // GET DASHBOARD DATA
+        // DASHBOARD VALUES
         // ==========================================
 
         double totalIncome =
-                dashboardService.getTotalIncome(userId);
+                dashboardService.getTotalIncome(
+                        userId
+                );
+
 
         double totalExpense =
-                dashboardService.getTotalExpense(userId);
+                dashboardService.getTotalExpense(
+                        userId
+                );
+
 
         double balance =
                 totalIncome - totalExpense;
 
+
         // ==========================================
-        // MAIN TITLE
+        // TITLE
         // ==========================================
 
         Label title =
@@ -73,24 +91,30 @@ public class DashboardView {
                         "Personal Finance Tracker"
                 );
 
+
         title.setStyle(
                 "-fx-font-size: 28px;" +
                         "-fx-font-weight: bold;"
         );
 
+
         // ==========================================
-        // WELCOME MESSAGE
+        // WELCOME
         // ==========================================
 
         Label welcome =
                 new Label(
-                        "Welcome, " + username
+                        "Welcome, "
+                                +
+                                username
                 );
+
 
         welcome.setStyle(
                 "-fx-font-size: 18px;" +
                         "-fx-font-weight: bold;"
         );
+
 
         // ==========================================
         // SUBTITLE
@@ -101,12 +125,14 @@ public class DashboardView {
                         "Manage your income, expenses and transactions"
                 );
 
+
         subtitle.setStyle(
                 "-fx-font-size: 14px;"
         );
 
+
         // ==========================================
-        // INCOME CARD
+        // SUMMARY CARDS
         // ==========================================
 
         VBox incomeCard =
@@ -115,9 +141,6 @@ public class DashboardView {
                         formatMoney(totalIncome)
                 );
 
-        // ==========================================
-        // EXPENSE CARD
-        // ==========================================
 
         VBox expenseCard =
                 createSummaryCard(
@@ -125,9 +148,6 @@ public class DashboardView {
                         formatMoney(totalExpense)
                 );
 
-        // ==========================================
-        // BALANCE CARD
-        // ==========================================
 
         VBox balanceCard =
                 createSummaryCard(
@@ -135,9 +155,6 @@ public class DashboardView {
                         formatMoney(balance)
                 );
 
-        // ==========================================
-        // SUMMARY CARD CONTAINER
-        // ==========================================
 
         HBox summaryBox =
                 new HBox(
@@ -147,46 +164,77 @@ public class DashboardView {
                         balanceCard
                 );
 
+
         summaryBox.setAlignment(
                 Pos.CENTER
         );
 
-        // Make all cards share available width
+
         HBox.setHgrow(
                 incomeCard,
                 Priority.ALWAYS
         );
+
 
         HBox.setHgrow(
                 expenseCard,
                 Priority.ALWAYS
         );
 
+
         HBox.setHgrow(
                 balanceCard,
                 Priority.ALWAYS
         );
 
+
         // ==========================================
-        // MANAGE EXPENSES BUTTON
+        // PROFILE BUTTON
+        // ==========================================
+
+        Button profileButton =
+                createButton(
+                        "Profile"
+                );
+
+
+        profileButton.setOnAction(event -> {
+
+
+            ProfileView profileView =
+                    new ProfileView();
+
+
+            Scene scene =
+                    new Scene(
+                            profileView.getView(stage),
+                            500,
+                            400
+                    );
+
+
+            stage.setScene(
+                    scene
+            );
+        });
+
+
+        // ==========================================
+        // EXPENSE BUTTON
         // ==========================================
 
         Button expenseButton =
-                new Button(
+                createButton(
                         "Manage Expenses"
                 );
 
-        expenseButton.setPrefWidth(220);
-        expenseButton.setPrefHeight(40);
-
-        expenseButton.setStyle(
-                "-fx-font-size: 14px;"
-        );
 
         expenseButton.setOnAction(event -> {
 
+
             ExpenseView expenseView =
                     new ExpenseView();
+
 
             Scene scene =
                     new Scene(
@@ -195,29 +243,29 @@ public class DashboardView {
                             500
                     );
 
-            stage.setScene(scene);
+
+            stage.setScene(
+                    scene
+            );
         });
 
+
         // ==========================================
-        // MANAGE INCOME BUTTON
+        // INCOME BUTTON
         // ==========================================
 
         Button incomeButton =
-                new Button(
+                createButton(
                         "Manage Income"
                 );
 
-        incomeButton.setPrefWidth(220);
-        incomeButton.setPrefHeight(40);
-
-        incomeButton.setStyle(
-                "-fx-font-size: 14px;"
-        );
 
         incomeButton.setOnAction(event -> {
 
+
             IncomeView incomeView =
                     new IncomeView();
+
 
             Scene scene =
                     new Scene(
@@ -226,29 +274,29 @@ public class DashboardView {
                             500
                     );
 
-            stage.setScene(scene);
+
+            stage.setScene(
+                    scene
+            );
         });
 
+
         // ==========================================
-        // TRANSACTIONS BUTTON
+        // TRANSACTION BUTTON
         // ==========================================
 
         Button transactionButton =
-                new Button(
+                createButton(
                         "Transactions"
                 );
 
-        transactionButton.setPrefWidth(220);
-        transactionButton.setPrefHeight(40);
-
-        transactionButton.setStyle(
-                "-fx-font-size: 14px;"
-        );
 
         transactionButton.setOnAction(event -> {
 
+
             TransactionView transactionView =
                     new TransactionView();
+
 
             Scene scene =
                     new Scene(
@@ -257,29 +305,60 @@ public class DashboardView {
                             500
                     );
 
-            stage.setScene(scene);
+
+            stage.setScene(
+                    scene
+            );
         });
 
+
         // ==========================================
-        // REFRESH DASHBOARD BUTTON
+        // ANALYTICS BUTTON
+        // ==========================================
+
+        Button analyticsButton =
+                createButton(
+                        "Financial Analytics"
+                );
+
+
+        analyticsButton.setOnAction(event -> {
+
+
+            AnalyticsView analyticsView =
+                    new AnalyticsView();
+
+
+            Scene scene =
+                    new Scene(
+                            analyticsView.getView(stage),
+                            900,
+                            700
+                    );
+
+
+            stage.setScene(
+                    scene
+            );
+        });
+
+
+        // ==========================================
+        // REFRESH BUTTON
         // ==========================================
 
         Button refreshButton =
-                new Button(
+                createButton(
                         "Refresh Dashboard"
                 );
 
-        refreshButton.setPrefWidth(220);
-        refreshButton.setPrefHeight(40);
-
-        refreshButton.setStyle(
-                "-fx-font-size: 14px;"
-        );
 
         refreshButton.setOnAction(event -> {
 
+
             DashboardView refreshedDashboard =
                     new DashboardView();
+
 
             Scene scene =
                     new Scene(
@@ -288,31 +367,32 @@ public class DashboardView {
                             600
                     );
 
-            stage.setScene(scene);
+
+            stage.setScene(
+                    scene
+            );
         });
+
 
         // ==========================================
         // LOGOUT BUTTON
         // ==========================================
 
         Button logoutButton =
-                new Button(
+                createButton(
                         "Logout"
                 );
 
-        logoutButton.setPrefWidth(220);
-        logoutButton.setPrefHeight(40);
-
-        logoutButton.setStyle(
-                "-fx-font-size: 14px;"
-        );
 
         logoutButton.setOnAction(event -> {
 
+
             Session.clear();
+
 
             LoginView loginView =
                     new LoginView();
+
 
             Scene scene =
                     new Scene(
@@ -321,26 +401,41 @@ public class DashboardView {
                             400
                     );
 
-            stage.setScene(scene);
+
+            stage.setScene(
+                    scene
+            );
         });
 
+
         // ==========================================
-        // ACTION BUTTON CONTAINER
+        // ACTION BUTTONS
         // ==========================================
 
         VBox actionBox =
                 new VBox(
-                        12,
+                        10,
+
+                        profileButton,
+
                         expenseButton,
+
                         incomeButton,
+
                         transactionButton,
+
+                        analyticsButton,
+
                         refreshButton,
+
                         logoutButton
                 );
+
 
         actionBox.setAlignment(
                 Pos.CENTER
         );
+
 
         // ==========================================
         // SPACER
@@ -349,10 +444,12 @@ public class DashboardView {
         Region spacer =
                 new Region();
 
+
         VBox.setVgrow(
                 spacer,
                 Priority.ALWAYS
         );
+
 
         // ==========================================
         // MAIN LAYOUT
@@ -360,40 +457,44 @@ public class DashboardView {
 
         VBox layout =
                 new VBox(
+
                         20,
+
                         title,
+
                         welcome,
+
                         subtitle,
+
                         summaryBox,
+
                         spacer,
+
                         actionBox
                 );
+
 
         layout.setPadding(
                 new Insets(30)
         );
 
+
         layout.setAlignment(
                 Pos.CENTER
         );
+
 
         layout.setStyle(
                 "-fx-background-color: #f5f7fa;"
         );
 
-        // ==========================================
-        // WINDOW SIZE
-        // ==========================================
-
-        stage.setTitle(
-                "Personal Finance Tracker"
-        );
 
         return layout;
     }
 
+
     // ==========================================
-    // CREATE SUMMARY CARD
+    // SUMMARY CARD
     // ==========================================
 
     private VBox createSummaryCard(
@@ -401,39 +502,60 @@ public class DashboardView {
             String value
     ) {
 
+
         Label titleLabel =
-                new Label(title);
+                new Label(
+                        title
+                );
+
 
         titleLabel.setStyle(
                 "-fx-font-size: 13px;" +
                         "-fx-font-weight: bold;"
         );
 
+
         Label valueLabel =
-                new Label(value);
+                new Label(
+                        value
+                );
+
 
         valueLabel.setStyle(
                 "-fx-font-size: 22px;" +
                         "-fx-font-weight: bold;"
         );
 
+
         VBox card =
                 new VBox(
                         10,
+
                         titleLabel,
+
                         valueLabel
                 );
+
 
         card.setAlignment(
                 Pos.CENTER
         );
 
-        card.setPrefWidth(230);
-        card.setPrefHeight(110);
+
+        card.setPrefWidth(
+                230
+        );
+
+
+        card.setPrefHeight(
+                110
+        );
+
 
         card.setMaxWidth(
                 Double.MAX_VALUE
         );
+
 
         card.setStyle(
                 "-fx-background-color: white;" +
@@ -443,8 +565,44 @@ public class DashboardView {
                         "-fx-padding: 20;"
         );
 
+
         return card;
     }
+
+
+    // ==========================================
+    // CREATE BUTTON
+    // ==========================================
+
+    private Button createButton(
+            String text
+    ) {
+
+
+        Button button =
+                new Button(
+                        text
+                );
+
+
+        button.setPrefWidth(
+                220
+        );
+
+
+        button.setPrefHeight(
+                40
+        );
+
+
+        button.setStyle(
+                "-fx-font-size: 14px;"
+        );
+
+
+        return button;
+    }
+
 
     // ==========================================
     // FORMAT MONEY
@@ -453,6 +611,7 @@ public class DashboardView {
     private String formatMoney(
             double amount
     ) {
+
 
         return String.format(
                 Locale.US,
