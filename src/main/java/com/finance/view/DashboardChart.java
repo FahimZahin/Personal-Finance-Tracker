@@ -56,29 +56,87 @@ public class DashboardChart {
                 320
         );
 
+        // ==========================================
+        // CREATE SERIES
+        // ==========================================
+
         XYChart.Series<String, Number> series =
                 new XYChart.Series<>();
 
-        series.getData().add(
+
+        // ==========================================
+        // INCOME DATA
+        // ==========================================
+
+        XYChart.Data<String, Number> incomeData =
                 new XYChart.Data<>(
                         "Income",
                         Math.max(0, totalIncome)
-                )
-        );
+                );
 
-        series.getData().add(
+
+        // ==========================================
+        // EXPENSE DATA
+        // ==========================================
+
+        XYChart.Data<String, Number> expenseData =
                 new XYChart.Data<>(
                         "Expense",
                         Math.max(0, totalExpense)
-                )
+                );
+
+
+        // ==========================================
+        // ADD DATA TO SERIES
+        // ==========================================
+
+        series.getData().add(
+                incomeData
         );
+
+        series.getData().add(
+                expenseData
+        );
+
+
+        // ==========================================
+        // ADD SERIES TO CHART
+        // ==========================================
 
         chart.getData().add(
                 series
         );
 
+
+        // ==========================================
+        // CHANGE EXPENSE BAR COLOR
+        // ==========================================
+
+        if (expenseData.getNode() != null) {
+
+            expenseData.getNode().setStyle(
+                    "-fx-bar-fill: #e74c3c;"
+            );
+        }
+
+
+        // ==========================================
+        // CHANGE INCOME BAR COLOR
+        // ==========================================
+        // This makes income green so the two
+        // values are visually different.
+
+        if (incomeData.getNode() != null) {
+
+            incomeData.getNode().setStyle(
+                    "-fx-bar-fill: #27ae60;"
+            );
+        }
+
+
         return chart;
     }
+
 
     // ==========================================
     // EXPENSE BY CATEGORY PIE CHART
@@ -106,8 +164,14 @@ public class DashboardChart {
                 320
         );
 
+
         Map<String, Double> categoryTotals =
                 new LinkedHashMap<>();
+
+
+        // ==========================================
+        // CALCULATE CATEGORY TOTALS
+        // ==========================================
 
         if (expenses != null) {
 
@@ -117,15 +181,19 @@ public class DashboardChart {
                     continue;
                 }
 
+
                 double amount =
                         expense.getAmount();
+
 
                 if (amount <= 0) {
                     continue;
                 }
 
+
                 String category =
                         expense.getCategory();
+
 
                 if (
                         category == null
@@ -136,8 +204,10 @@ public class DashboardChart {
                     category = "Other";
                 }
 
+
                 category =
                         category.trim();
+
 
                 categoryTotals.merge(
                         category,
@@ -147,8 +217,9 @@ public class DashboardChart {
             }
         }
 
+
         // ==========================================
-        // ADD DATA TO PIE CHART
+        // ADD CATEGORY DATA TO PIE CHART
         // ==========================================
 
         for (
@@ -163,6 +234,7 @@ public class DashboardChart {
                     )
             );
         }
+
 
         return chart;
     }
