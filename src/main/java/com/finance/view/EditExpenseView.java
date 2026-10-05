@@ -153,8 +153,16 @@ public class EditExpenseView {
 
 
 
-                message.setText(
-                        "Expense updated successfully!"
+                TransactionView transactionView =
+                        new TransactionView();
+
+
+                stage.setScene(
+                        new Scene(
+                                transactionView.getView(stage),
+                                700,
+                                500
+                        )
                 );
 
 

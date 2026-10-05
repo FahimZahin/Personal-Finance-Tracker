@@ -138,11 +138,14 @@ public class TransactionView {
 
         deleteButton.setOnAction(event -> {
 
+
             TransactionRow selected =
                     table.getSelectionModel()
                             .getSelectedItem();
 
-            if (selected == null) {
+
+
+            if(selected == null){
 
                 showAlert(
                         Alert.AlertType.WARNING,
@@ -153,39 +156,82 @@ public class TransactionView {
                 return;
             }
 
-            try {
 
-                if ("Income".equals(selected.getType())) {
 
-                    incomeService.deleteIncome(
-                            selected.getId()
+            Alert confirm =
+                    new Alert(
+                            Alert.AlertType.CONFIRMATION
                     );
 
-                } else {
 
-                    expenseService.deleteExpense(
-                            selected.getId()
+            confirm.setTitle(
+                    "Confirm Delete"
+            );
+
+
+            confirm.setHeaderText(
+                    null
+            );
+
+
+            confirm.setContentText(
+                    "Are you sure you want to delete this transaction?"
+            );
+
+
+
+            if(
+                    confirm.showAndWait()
+                            .get()
+                            .getButtonData()
+                            .isDefaultButton()
+            ){
+
+                try {
+
+
+                    if(
+                            "Income".equals(
+                                    selected.getType()
+                            )
+                    ){
+
+                        incomeService.deleteIncome(
+                                selected.getId()
+                        );
+
+                    }
+                    else {
+
+
+                        expenseService.deleteExpense(
+                                selected.getId()
+                        );
+
+                    }
+
+
+                    loadTransactions();
+
+
+
+                    showAlert(
+                            Alert.AlertType.INFORMATION,
+                            "Deleted",
+                            "Transaction deleted successfully."
                     );
+
+
+                }
+                catch(Exception e){
+
+                    e.printStackTrace();
+
                 }
 
-                loadTransactions();
-
-                showAlert(
-                        Alert.AlertType.INFORMATION,
-                        "Deleted",
-                        "Transaction deleted successfully."
-                );
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-
-                showAlert(
-                        Alert.AlertType.ERROR,
-                        "Delete Failed",
-                        "Could not delete the selected transaction."
-                );
             }
+
+
         });
 
         // ==========================================
@@ -310,6 +356,7 @@ public class TransactionView {
                 new HBox(
                         10,
                         deleteButton,
+                        editButton,
                         refreshButton,
                         exportButton,
                         backButton
@@ -327,8 +374,7 @@ public class TransactionView {
                 new VBox(
                         20,
                         table,
-                        buttonLayout,
-                        editButton
+                        buttonLayout
                 );
 
         layout.setPadding(
