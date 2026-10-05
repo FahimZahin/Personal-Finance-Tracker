@@ -250,6 +250,76 @@ public class ExpenseDAO {
 
     }
 
+    public void updateExpense(Expense expense) {
+
+
+        String sql =
+                """
+                UPDATE expenses
+                SET amount = ?,
+                    category = ?,
+                    description = ?,
+                    date = ?
+                WHERE id = ?
+                """;
+
+
+        try(
+                Connection connection =
+                        DatabaseConnection.getConnection();
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+
+        ){
+
+            statement.setDouble(
+                    1,
+                    expense.getAmount()
+            );
+
+
+            statement.setString(
+                    2,
+                    expense.getCategory()
+            );
+
+
+            statement.setString(
+                    3,
+                    expense.getDescription()
+            );
+
+
+            statement.setString(
+                    4,
+                    expense.getDate().toString()
+            );
+
+
+            statement.setInt(
+                    5,
+                    expense.getId()
+            );
+
+
+            statement.executeUpdate();
+
+
+            System.out.println(
+                    "Expense updated successfully."
+            );
+
+
+        }
+        catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+
+    }
+
 
 
 }

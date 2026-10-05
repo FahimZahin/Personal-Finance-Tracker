@@ -51,6 +51,14 @@ public class IncomeService {
 
     }
 
+    public void updateIncome(Income income){
+
+        incomeDAO.updateIncome(
+                income
+        );
+
+    }
+
 
 
 }

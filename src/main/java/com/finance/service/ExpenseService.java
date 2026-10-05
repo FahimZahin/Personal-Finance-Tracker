@@ -46,6 +46,14 @@ public class ExpenseService {
 
     }
 
+    public void updateExpense(Expense expense){
+
+        expenseDAO.updateExpense(
+                expense
+        );
+
+    }
+
 
 
 }
