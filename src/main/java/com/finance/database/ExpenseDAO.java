@@ -320,6 +320,90 @@ public class ExpenseDAO {
 
     }
 
+    public Expense getExpenseById(int id){
+
+
+        Expense expense = null;
+
+
+        String sql =
+                "SELECT * FROM expenses WHERE id=?";
+
+
+        try(
+                Connection connection =
+                        DatabaseConnection.getConnection();
+
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+
+        ){
+
+
+            statement.setInt(
+                    1,
+                    id
+            );
+
+
+            ResultSet result =
+                    statement.executeQuery();
+
+
+
+            if(result.next()){
+
+
+                expense = new Expense();
+
+
+                expense.setId(
+                        result.getInt("id")
+                );
+
+
+                expense.setUserId(
+                        result.getInt("user_id")
+                );
+
+
+                expense.setAmount(
+                        result.getDouble("amount")
+                );
+
+
+                expense.setCategory(
+                        result.getString("category")
+                );
+
+
+                expense.setDescription(
+                        result.getString("description")
+                );
+
+
+                expense.setDate(
+                        LocalDate.parse(
+                                result.getString("date")
+                        )
+                );
+
+            }
+
+
+        }
+        catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+
+
+        return expense;
+
+    }
+
 
 
 }

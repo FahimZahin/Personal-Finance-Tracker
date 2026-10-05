@@ -1,6 +1,6 @@
 package com.finance.view;
 
-
+import javafx.scene.control.DatePicker;
 import com.finance.model.Expense;
 import com.finance.service.ExpenseService;
 import com.finance.Session;
@@ -20,6 +20,7 @@ public class EditExpenseView {
 
 
     private final int expenseId;
+    private Expense existingExpense;
 
     private final ExpenseService expenseService;
 
@@ -31,6 +32,10 @@ public class EditExpenseView {
 
         expenseService =
                 new ExpenseService();
+
+
+        existingExpense =
+                expenseService.getExpenseById(expenseId);
 
     }
 
@@ -229,7 +234,32 @@ public class EditExpenseView {
                 Pos.CENTER
         );
 
+        if(existingExpense != null){
 
+
+            amountField.setText(
+                    String.valueOf(
+                            existingExpense.getAmount()
+                    )
+            );
+
+
+            categoryField.setText(
+                    existingExpense.getCategory()
+            );
+
+
+            descriptionField.setText(
+                    existingExpense.getDescription()
+            );
+
+
+            datePicker.setValue(
+                    existingExpense.getDate()
+            );
+
+
+        }
 
         return layout;
 
