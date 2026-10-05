@@ -232,6 +232,71 @@ public class TransactionView {
             stage.setScene(scene);
         });
 
+        Button editButton =
+                new Button(
+                        "Edit Selected"
+                );
+        editButton.setOnAction(event -> {
+
+
+            TransactionRow selected =
+                    table.getSelectionModel()
+                            .getSelectedItem();
+
+
+            if(selected == null){
+
+                return;
+
+            }
+
+
+            if(
+                    selected.getType()
+                            .equals("Income")
+            ){
+
+                EditIncomeView editIncomeView =
+                        new EditIncomeView(
+                                selected.getId()
+                        );
+
+
+                Scene scene =
+                        new Scene(
+                                editIncomeView.getView(stage),
+                                500,
+                                500
+                        );
+
+
+                stage.setScene(scene);
+
+
+            }
+            else{
+
+
+                EditExpenseView editExpenseView =
+                        new EditExpenseView(
+                                selected.getId()
+                        );
+
+
+                Scene scene =
+                        new Scene(
+                                editExpenseView.getView(stage),
+                                500,
+                                500
+                        );
+
+
+                stage.setScene(scene);
+
+            }
+
+        });
+
         // ==========================================
         // BUTTON LAYOUT
         // ==========================================
@@ -257,7 +322,8 @@ public class TransactionView {
                 new VBox(
                         20,
                         table,
-                        buttonLayout
+                        buttonLayout,
+                        editButton
                 );
 
         layout.setPadding(
