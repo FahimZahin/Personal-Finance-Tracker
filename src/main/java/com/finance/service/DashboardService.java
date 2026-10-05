@@ -3,20 +3,22 @@ package com.finance.service;
 
 import com.finance.model.Expense;
 import com.finance.model.Income;
+import com.finance.model.CategoryExpense;
 
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 
 public class DashboardService {
 
 
-
     private final ExpenseService expenseService;
 
     private final IncomeService incomeService;
-
 
 
 
@@ -40,12 +42,11 @@ public class DashboardService {
     public double getTotalExpense(int userId){
 
 
+        double total = 0;
+
+
         List<Expense> expenses =
                 expenseService.getExpensesByUser(userId);
-
-
-
-        double total = 0;
 
 
 
@@ -58,11 +59,11 @@ public class DashboardService {
         }
 
 
-
         return total;
 
-
     }
+
+
 
 
 
@@ -71,12 +72,11 @@ public class DashboardService {
     public double getTotalIncome(int userId){
 
 
+        double total = 0;
+
+
         List<Income> incomes =
                 incomeService.getIncomeByUser(userId);
-
-
-
-        double total = 0;
 
 
 
@@ -89,11 +89,10 @@ public class DashboardService {
         }
 
 
-
         return total;
 
-
     }
+
 
 
 
@@ -109,6 +108,73 @@ public class DashboardService {
 
     }
 
+
+
+
+
+
+    public List<CategoryExpense> getExpenseByCategory(
+            int userId
+    ){
+
+
+        Map<String,Double> map =
+                new HashMap<>();
+
+
+
+        List<Expense> expenses =
+                expenseService.getExpensesByUser(userId);
+
+
+
+        for(Expense expense : expenses){
+
+
+            map.put(
+                    expense.getCategory(),
+                    map.getOrDefault(
+                            expense.getCategory(),
+                            0.0
+                    )
+                            +
+                            expense.getAmount()
+            );
+
+
+        }
+
+
+
+
+
+        List<CategoryExpense> result =
+                new ArrayList<>();
+
+
+
+        for(
+                Map.Entry<String,Double> entry :
+                map.entrySet()
+        ){
+
+
+            result.add(
+                    new CategoryExpense(
+                            entry.getKey(),
+                            entry.getValue()
+                    )
+            );
+
+
+        }
+
+
+
+        return result;
+
+
+    }
 
 
 }
