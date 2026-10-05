@@ -26,8 +26,16 @@ public class Application extends javafx.application.Application {
         Scene scene =
                 new Scene(
                         loginView.getView(stage),
-                        500,
-                        400
+                        900,
+                        650
+                );
+
+
+        scene.getStylesheets()
+                .add(
+                        getClass()
+                                .getResource("/style.css")
+                                .toExternalForm()
                 );
 
 

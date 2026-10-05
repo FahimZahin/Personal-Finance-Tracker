@@ -8,7 +8,7 @@ import com.finance.service.DashboardService;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
+import javafx.scene.layout.HBox;
 
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
@@ -89,33 +89,40 @@ public class DashboardView {
                 );
 
 
+        VBox incomeCard =
+                createCard(
+                        "Income",
+                        String.valueOf(totalIncome)
+                );
 
 
+        VBox expenseCard =
+                createCard(
+                        "Expense",
+                        String.valueOf(totalExpense)
+                );
 
-        Label incomeLabel =
-                new Label(
-                        "Total Income: "
-                                +
-                                totalIncome
+
+        VBox balanceCard =
+                createCard(
+                        "Balance",
+                        String.valueOf(balance)
                 );
 
 
 
-        Label expenseLabel =
-                new Label(
-                        "Total Expense: "
-                                +
-                                totalExpense
+        HBox cards =
+                new HBox(
+                        20,
+                        incomeCard,
+                        expenseCard,
+                        balanceCard
                 );
 
 
-
-        Label balanceLabel =
-                new Label(
-                        "Balance: "
-                                +
-                                balance
-                );
+        cards.setAlignment(
+                Pos.CENTER
+        );
 
 
 
@@ -380,9 +387,7 @@ public class DashboardView {
                 new VBox(
                         15,
                         welcome,
-                        incomeLabel,
-                        expenseLabel,
-                        balanceLabel,
+                        cards,
                         chart,
                         categoryTitle,
                         categoryBox,
@@ -404,6 +409,54 @@ public class DashboardView {
 
         return layout;
 
+
+    }
+
+    private VBox createCard(
+            String title,
+            String value
+    ){
+
+        Label titleLabel =
+                new Label(title);
+
+
+        titleLabel.getStyleClass()
+                .add(
+                        "card-title"
+                );
+
+
+        Label valueLabel =
+                new Label(value);
+
+
+        valueLabel.getStyleClass()
+                .add(
+                        "card-value"
+                );
+
+
+        VBox box =
+                new VBox(
+                        10,
+                        titleLabel,
+                        valueLabel
+                );
+
+
+        box.getStyleClass()
+                .add(
+                        "card"
+                );
+
+
+        box.setAlignment(
+                Pos.CENTER
+        );
+
+
+        return box;
 
     }
 
