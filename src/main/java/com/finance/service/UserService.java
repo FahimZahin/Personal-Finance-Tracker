@@ -13,19 +13,11 @@ public class UserService {
 
 
 
-    public UserService() {
-
-        userDAO = new UserDAO();
-
-    }
+    public UserService(){
 
 
-
-
-    public void register(User user) {
-
-
-        userDAO.addUser(user);
+        userDAO =
+                new UserDAO();
 
 
     }
@@ -34,14 +26,53 @@ public class UserService {
 
 
 
-    public User login(String email, String password) {
+    // LOGIN
 
+    public User login(
+            String email,
+            String password
+    ){
 
         return userDAO.login(
                 email,
                 password
         );
 
+    }
+
+
+
+
+
+
+
+    // REGISTER
+
+    public void register(
+            User user
+    ){
+
+        userDAO.addUser(
+                user
+        );
+
+    }
+
+
+
+
+
+
+
+    // UPDATE PROFILE
+
+    public void updateUser(
+            User user
+    ){
+
+        userDAO.updateUser(
+                user
+        );
 
     }
 

@@ -3,6 +3,7 @@ package com.finance.view;
 
 import com.finance.Session;
 import com.finance.model.User;
+import com.finance.service.UserService;
 
 
 import javafx.geometry.Insets;
@@ -10,8 +11,11 @@ import javafx.geometry.Pos;
 
 
 import javafx.scene.Scene;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 
 import javafx.scene.layout.VBox;
 
@@ -20,6 +24,20 @@ import javafx.stage.Stage;
 
 
 public class ProfileView {
+
+
+    private final UserService userService;
+
+
+
+    public ProfileView(){
+
+        userService =
+                new UserService();
+
+    }
+
+
 
 
 
@@ -35,27 +53,119 @@ public class ProfileView {
 
         Label title =
                 new Label(
-                        "User Profile"
+                        "My Profile"
+                );
+
+
+
+        TextField usernameField =
+                new TextField();
+
+
+
+        usernameField.setText(
+                user.getUsername()
+        );
+
+
+
+        usernameField.setPromptText(
+                "Username"
+        );
+
+
+
+
+        PasswordField passwordField =
+                new PasswordField();
+
+
+
+        passwordField.setPromptText(
+                "New Password"
+        );
+
+
+
+
+
+        Label message =
+                new Label();
+
+
+
+
+
+        Button saveButton =
+                new Button(
+                        "Save Changes"
                 );
 
 
 
 
-        Label usernameLabel =
-                new Label(
-                        "Username: "
-                                +
-                                user.getUsername()
+
+        saveButton.setOnAction(event -> {
+
+
+            try{
+
+
+                user.setUsername(
+                        usernameField.getText()
                 );
 
 
 
-        Label emailLabel =
-                new Label(
-                        "Email: "
-                                +
-                                user.getEmail()
+                if(
+                        !passwordField.getText()
+                                .isEmpty()
+                ){
+
+                    user.setPassword(
+                            passwordField.getText()
+                    );
+
+                }
+
+
+
+                userService.updateUser(
+                        user
                 );
+
+
+
+                Session.setUser(
+                        user
+                );
+
+
+
+                message.setText(
+                        "Profile updated successfully!"
+                );
+
+
+
+            }
+            catch(Exception e){
+
+
+                message.setText(
+                        "Update failed."
+                );
+
+
+                e.printStackTrace();
+
+
+            }
+
+
+
+        });
+
 
 
 
@@ -64,9 +174,8 @@ public class ProfileView {
 
         Button backButton =
                 new Button(
-                        "Back to Dashboard"
+                        "Back Dashboard"
                 );
-
 
 
 
@@ -74,22 +183,18 @@ public class ProfileView {
 
 
 
-            DashboardView dashboardView =
+            DashboardView dashboard =
                     new DashboardView();
 
 
 
-            Scene scene =
+            stage.setScene(
                     new Scene(
-                            dashboardView.getView(stage),
-                            600,
-                            500
-                    );
-
-
-
-            stage.setScene(scene);
-
+                            dashboard.getView(stage),
+                            900,
+                            650
+                    )
+            );
 
 
         });
@@ -102,17 +207,13 @@ public class ProfileView {
 
         VBox layout =
                 new VBox(
-
-                        20,
-
+                        15,
                         title,
-
-                        usernameLabel,
-
-                        emailLabel,
-
-                        backButton
-
+                        usernameField,
+                        passwordField,
+                        saveButton,
+                        backButton,
+                        message
                 );
 
 
