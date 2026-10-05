@@ -6,6 +6,8 @@ import com.finance.model.Income;
 import com.finance.service.CsvExportService;
 import com.finance.service.ExpenseService;
 import com.finance.service.IncomeService;
+import javafx.scene.control.Button;
+
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -244,6 +246,7 @@ public class TransactionView {
                             .getSelectedItem();
 
 
+
             if(selected == null){
 
                 return;
@@ -251,15 +254,15 @@ public class TransactionView {
             }
 
 
-            if(
-                    selected.getType()
-                            .equals("Income")
-            ){
+
+            if(selected.getType().equals("Income")){
+
 
                 EditIncomeView editIncomeView =
                         new EditIncomeView(
                                 selected.getId()
                         );
+
 
 
                 Scene scene =
@@ -293,7 +296,9 @@ public class TransactionView {
 
                 stage.setScene(scene);
 
+
             }
+
 
         });
 

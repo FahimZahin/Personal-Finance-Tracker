@@ -17,28 +17,26 @@ import java.util.List;
 public class IncomeDAO {
 
 
-    // ============================
     // ADD INCOME
-    // ============================
-
-    public void addIncome(Income income) {
+    public void addIncome(Income income){
 
 
         String sql =
                 """
                 INSERT INTO income
                 (user_id, amount, source, description, date)
-                VALUES (?, ?, ?, ?, ?)
+                VALUES(?,?,?,?,?)
                 """;
 
 
-        try (
+        try(
                 Connection connection =
                         DatabaseConnection.getConnection();
 
                 PreparedStatement statement =
                         connection.prepareStatement(sql)
-        ) {
+
+        ){
 
 
             statement.setInt(
@@ -73,34 +71,26 @@ public class IncomeDAO {
 
             statement.executeUpdate();
 
-            System.out.println(
-                    "Saved income for user id: "
-                            + income.getUserId()
-            );
-
 
             System.out.println(
                     "Income added successfully."
             );
 
 
-        } catch (Exception e) {
+        }
+        catch(Exception e){
 
             e.printStackTrace();
 
         }
 
+
     }
 
 
 
-
-    // ============================
-    // GET INCOME BY USER
-    // ============================
-
-
-    public List<Income> getIncomeByUser(int userId) {
+    // GET ALL INCOME BY USER
+    public List<Income> getIncomeByUser(int userId){
 
 
         List<Income> incomes =
@@ -115,14 +105,14 @@ public class IncomeDAO {
                 """;
 
 
-
-        try (
+        try(
                 Connection connection =
                         DatabaseConnection.getConnection();
 
                 PreparedStatement statement =
                         connection.prepareStatement(sql)
-        ) {
+
+        ){
 
 
             statement.setInt(
@@ -136,12 +126,11 @@ public class IncomeDAO {
 
 
 
-            while(result.next()) {
+            while(result.next()){
 
 
                 Income income =
                         new Income();
-
 
 
                 income.setId(
@@ -176,19 +165,17 @@ public class IncomeDAO {
                 );
 
 
-
                 incomes.add(income);
 
             }
 
 
-
-        } catch(Exception e) {
+        }
+        catch(Exception e){
 
             e.printStackTrace();
 
         }
-
 
 
         return incomes;
@@ -198,33 +185,25 @@ public class IncomeDAO {
 
 
 
+    // GET SINGLE INCOME
+    public Income getIncomeById(int id){
 
 
-    // ============================
-    // DELETE INCOME
-    // ============================
-
-
-    public void deleteIncome(int id) {
+        Income income = null;
 
 
         String sql =
-                """
-                DELETE FROM income
-                WHERE id = ?
-                """;
-
+                "SELECT * FROM income WHERE id=?";
 
 
         try(
                 Connection connection =
                         DatabaseConnection.getConnection();
 
-
                 PreparedStatement statement =
                         connection.prepareStatement(sql)
 
-        ) {
+        ){
 
 
             statement.setInt(
@@ -233,34 +212,62 @@ public class IncomeDAO {
             );
 
 
-            int rows =
-                    statement.executeUpdate();
+            ResultSet result =
+                    statement.executeQuery();
 
 
 
-            if(rows > 0) {
+            if(result.next()){
 
-                System.out.println(
-                        "Income deleted successfully."
+
+                income =
+                        new Income();
+
+
+                income.setId(
+                        result.getInt("id")
                 );
 
-            }
-            else {
 
-                System.out.println(
-                        "Income ID not found."
+                income.setUserId(
+                        result.getInt("user_id")
                 );
 
+
+                income.setAmount(
+                        result.getDouble("amount")
+                );
+
+
+                income.setSource(
+                        result.getString("source")
+                );
+
+
+                income.setDescription(
+                        result.getString("description")
+                );
+
+
+                income.setDate(
+                        LocalDate.parse(
+                                result.getString("date")
+                        )
+                );
+
+
             }
 
 
-
-        } catch(Exception e) {
+        }
+        catch(Exception e){
 
             e.printStackTrace();
 
         }
 
+
+        return income;
 
     }
 
@@ -268,24 +275,18 @@ public class IncomeDAO {
 
 
 
-
-
-    // ============================
     // UPDATE INCOME
-    // ============================
-
-
-    public void updateIncome(Income income) {
+    public void updateIncome(Income income){
 
 
         String sql =
                 """
                 UPDATE income
-                SET amount = ?,
-                    source = ?,
-                    description = ?,
-                    date = ?
-                WHERE id = ?
+                SET amount=?,
+                    source=?,
+                    description=?,
+                    date=?
+                WHERE id=?
                 """;
 
 
@@ -294,11 +295,10 @@ public class IncomeDAO {
                 Connection connection =
                         DatabaseConnection.getConnection();
 
-
                 PreparedStatement statement =
                         connection.prepareStatement(sql)
 
-        ) {
+        ){
 
 
             statement.setDouble(
@@ -331,9 +331,7 @@ public class IncomeDAO {
             );
 
 
-
             statement.executeUpdate();
-
 
 
             System.out.println(
@@ -341,8 +339,8 @@ public class IncomeDAO {
             );
 
 
-
-        } catch(Exception e) {
+        }
+        catch(Exception e){
 
             e.printStackTrace();
 
@@ -350,5 +348,52 @@ public class IncomeDAO {
 
 
     }
+
+
+
+
+
+    // DELETE INCOME
+    public void deleteIncome(int id){
+
+
+        String sql =
+                "DELETE FROM income WHERE id=?";
+
+
+        try(
+                Connection connection =
+                        DatabaseConnection.getConnection();
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+
+        ){
+
+
+            statement.setInt(
+                    1,
+                    id
+            );
+
+
+            statement.executeUpdate();
+
+
+            System.out.println(
+                    "Income deleted successfully."
+            );
+
+
+        }
+        catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+
+
+    }
+
 
 }

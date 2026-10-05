@@ -4,15 +4,19 @@ package com.finance.view;
 import com.finance.model.Income;
 import com.finance.service.IncomeService;
 
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+
 import java.time.LocalDate;
+
 
 
 public class EditIncomeView {
@@ -22,20 +26,33 @@ public class EditIncomeView {
 
     private final IncomeService incomeService;
 
+    private Income existingIncome;
+
+
 
     public EditIncomeView(int incomeId){
+
 
         this.incomeId =
                 incomeId;
 
+
         incomeService =
                 new IncomeService();
+
+
+        existingIncome =
+                incomeService.getIncomeById(
+                        incomeId
+                );
 
     }
 
 
 
+
     public VBox getView(Stage stage){
+
 
 
         Label title =
@@ -44,22 +61,80 @@ public class EditIncomeView {
                 );
 
 
+
         TextField amountField =
                 new TextField();
+
+
+        amountField.setPromptText(
+                "Amount"
+        );
+
 
 
         TextField sourceField =
                 new TextField();
 
 
+        sourceField.setPromptText(
+                "Source"
+        );
+
+
+
         TextField descriptionField =
                 new TextField();
 
 
+        descriptionField.setPromptText(
+                "Description"
+        );
+
+
+
         DatePicker datePicker =
-                new DatePicker(
-                        LocalDate.now()
-                );
+                new DatePicker();
+
+
+
+
+
+        if(existingIncome != null){
+
+
+            amountField.setText(
+                    String.valueOf(
+                            existingIncome.getAmount()
+                    )
+            );
+
+
+            sourceField.setText(
+                    existingIncome.getSource()
+            );
+
+
+            descriptionField.setText(
+                    existingIncome.getDescription()
+            );
+
+
+            datePicker.setValue(
+                    existingIncome.getDate()
+            );
+
+
+        }
+        else{
+
+            datePicker.setValue(
+                    LocalDate.now()
+            );
+
+        }
+
+
+
 
 
         Button updateButton =
@@ -68,12 +143,16 @@ public class EditIncomeView {
                 );
 
 
+
         Label message =
                 new Label();
 
 
 
+
+
         updateButton.setOnAction(event -> {
+
 
 
             try{
@@ -83,9 +162,11 @@ public class EditIncomeView {
                         new Income();
 
 
+
                 income.setId(
                         incomeId
                 );
+
 
 
                 income.setAmount(
@@ -95,9 +176,11 @@ public class EditIncomeView {
                 );
 
 
+
                 income.setSource(
                         sourceField.getText()
                 );
+
 
 
                 income.setDescription(
@@ -105,9 +188,11 @@ public class EditIncomeView {
                 );
 
 
+
                 income.setDate(
                         datePicker.getValue()
                 );
+
 
 
                 incomeService.updateIncome(
@@ -115,46 +200,60 @@ public class EditIncomeView {
                 );
 
 
+
                 message.setText(
                         "Income updated successfully!"
                 );
 
 
+
             }
             catch(Exception e){
 
+
                 message.setText(
-                        "Invalid data"
+                        "Invalid income data."
                 );
 
+
             }
+
 
         });
 
 
 
-        Button back =
+
+
+        Button backButton =
                 new Button(
-                        "Back"
+                        "Back to Transactions"
                 );
 
 
-        back.setOnAction(event -> {
+
+        backButton.setOnAction(event -> {
 
 
             TransactionView transactionView =
                     new TransactionView();
 
 
-            stage.setScene(
+
+            Scene scene =
                     new Scene(
                             transactionView.getView(stage),
                             700,
                             500
-                    )
-            );
+                    );
+
+
+            stage.setScene(scene);
+
 
         });
+
+
 
 
 
@@ -167,9 +266,10 @@ public class EditIncomeView {
                         descriptionField,
                         datePicker,
                         updateButton,
-                        back,
+                        backButton,
                         message
                 );
+
 
 
         layout.setPadding(
@@ -182,8 +282,10 @@ public class EditIncomeView {
         );
 
 
+
         return layout;
 
     }
+
 
 }
