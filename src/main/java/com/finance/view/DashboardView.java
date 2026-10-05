@@ -4,7 +4,7 @@ package com.finance.view;
 import com.finance.Session;
 import com.finance.model.CategoryExpense;
 import com.finance.service.DashboardService;
-
+import javafx.scene.chart.PieChart;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -142,6 +142,9 @@ public class DashboardView {
                         xAxis,
                         yAxis
                 );
+
+        PieChart expensePieChart =
+                createExpensePieChart(userId);
 
 
 
@@ -378,8 +381,17 @@ public class DashboardView {
         );
 
 
+        HBox charts =
+                new HBox(
+                        20,
+                        chart,
+                        expensePieChart
+                );
 
 
+        charts.setAlignment(
+                Pos.CENTER
+        );
 
 
 
@@ -388,9 +400,7 @@ public class DashboardView {
                         15,
                         welcome,
                         cards,
-                        chart,
-                        categoryTitle,
-                        categoryBox,
+                        charts,
                         buttons
                 );
 
@@ -457,6 +467,51 @@ public class DashboardView {
 
 
         return box;
+
+    }
+
+    private PieChart createExpensePieChart(int userId){
+
+
+        PieChart pieChart =
+                new PieChart();
+
+
+
+        pieChart.setTitle(
+                "Expense Distribution"
+        );
+
+
+
+        List<CategoryExpense> categories =
+                dashboardService.getExpenseByCategory(userId);
+
+
+
+        for(CategoryExpense category : categories){
+
+
+            pieChart.getData()
+                    .add(
+                            new PieChart.Data(
+                                    category.getCategory(),
+                                    category.getAmount()
+                            )
+                    );
+
+
+        }
+
+
+
+        pieChart.setPrefSize(
+                400,
+                300
+        );
+
+
+        return pieChart;
 
     }
 
