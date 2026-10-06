@@ -86,9 +86,19 @@ public class UserService {
 
     // REGISTER
 
-    public void register(
-            User user
-    ){
+    public boolean register(User user){
+
+
+        if(
+                userDAO.emailExists(
+                        user.getEmail()
+                )
+        ){
+
+            return false;
+
+        }
+
 
 
         String hashedPassword =
@@ -109,6 +119,9 @@ public class UserService {
                 user
         );
 
+
+
+        return true;
 
     }
 

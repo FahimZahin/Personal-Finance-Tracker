@@ -8,13 +8,11 @@ import com.finance.service.UserService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
-
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
 
 import javafx.scene.layout.VBox;
 
@@ -38,8 +36,8 @@ public class RegisterView {
 
 
 
-    public VBox getView(Stage stage) {
 
+    public VBox getView(Stage stage) {
 
 
         Label title =
@@ -52,7 +50,6 @@ public class RegisterView {
         TextField usernameField =
                 new TextField();
 
-
         usernameField.setPromptText(
                 "Username"
         );
@@ -62,7 +59,6 @@ public class RegisterView {
         TextField emailField =
                 new TextField();
 
-
         emailField.setPromptText(
                 "Email"
         );
@@ -71,7 +67,6 @@ public class RegisterView {
 
         PasswordField passwordField =
                 new PasswordField();
-
 
         passwordField.setPromptText(
                 "Password"
@@ -100,11 +95,36 @@ public class RegisterView {
 
 
 
+
         registerButton.setOnAction(event -> {
 
 
 
             try {
+
+
+
+                if(
+                        usernameField.getText().isEmpty()
+                                ||
+                                emailField.getText().isEmpty()
+                                ||
+                                passwordField.getText().isEmpty()
+                ){
+
+
+                    message.setText(
+                            "All fields are required."
+                    );
+
+
+                    return;
+
+
+                }
+
+
+
 
 
 
@@ -130,40 +150,55 @@ public class RegisterView {
                 );
 
 
-                if(
-                        usernameField.getText().isEmpty()
-                                ||
-                                emailField.getText().isEmpty()
-                                ||
-                                passwordField.getText().isEmpty()
-                ){
+
+
+
+
+                boolean success =
+                        userService.register(
+                                user
+                        );
+
+
+
+
+
+                if(success){
+
 
                     message.setText(
-                            "All fields are required."
+                            "Account created successfully!"
                     );
 
-                    return;
+
+                    usernameField.clear();
+                    emailField.clear();
+                    passwordField.clear();
+
 
                 }
-                userService.register(user);
+                else{
+
+
+                    message.setText(
+                            "Email already exists."
+                    );
+
+
+                }
 
 
 
-                message.setText(
-                        "Account created successfully!"
-                );
+            }
+            catch(Exception e){
 
 
-
-
-            } catch(Exception e) {
-
+                e.printStackTrace();
 
 
                 message.setText(
                         "Registration failed."
                 );
-
 
 
             }
@@ -177,8 +212,9 @@ public class RegisterView {
 
 
 
-        backButton.setOnAction(event -> {
 
+
+        backButton.setOnAction(event -> {
 
 
             LoginView loginView =
@@ -209,25 +245,15 @@ public class RegisterView {
 
         VBox layout =
                 new VBox(
-
                         15,
-
                         title,
-
                         usernameField,
-
                         emailField,
-
                         passwordField,
-
                         registerButton,
-
                         backButton,
-
                         message
-
                 );
-
 
 
 
@@ -246,7 +272,9 @@ public class RegisterView {
         return layout;
 
 
+
     }
+
 
 
 }

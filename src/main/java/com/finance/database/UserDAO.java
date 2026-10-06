@@ -222,6 +222,50 @@ public class UserDAO {
 
     }
 
+    public boolean emailExists(String email){
+
+
+        String sql =
+                "SELECT id FROM users WHERE email=?";
+
+
+        try(
+                Connection connection =
+                        DatabaseConnection.getConnection();
+
+
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+
+        ){
+
+
+            statement.setString(
+                    1,
+                    email
+            );
+
+
+            ResultSet result =
+                    statement.executeQuery();
+
+
+
+            return result.next();
+
+
+        }
+        catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+
+
+        return false;
+
+    }
+
 
 
 }
