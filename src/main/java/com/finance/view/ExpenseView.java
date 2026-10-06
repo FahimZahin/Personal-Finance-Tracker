@@ -125,10 +125,40 @@ public class ExpenseView {
             try {
 
 
+                if(amountField.getText().isEmpty()
+                        ||
+                        categoryField.getText().isEmpty()){
+
+
+                    message.setText(
+                            "Please fill all required fields."
+                    );
+
+
+                    return;
+
+                }
+
+
+
                 double amount =
                         Double.parseDouble(
                                 amountField.getText()
                         );
+
+
+
+                if(amount <= 0){
+
+
+                    message.setText(
+                            "Amount must be greater than zero."
+                    );
+
+
+                    return;
+
+                }
 
 
 

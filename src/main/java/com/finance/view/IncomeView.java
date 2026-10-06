@@ -142,6 +142,20 @@ public class IncomeView {
             try {
 
 
+                if(amountField.getText().isEmpty()
+                        ||
+                        sourceField.getText().isEmpty()){
+
+
+                    message.setText(
+                            "Please fill all required fields."
+                    );
+
+                    return;
+
+                }
+
+
 
                 double amount =
                         Double.parseDouble(
@@ -150,9 +164,19 @@ public class IncomeView {
 
 
 
+                if(amount <= 0){
+
+
+                    message.setText(
+                            "Amount must be greater than zero."
+                    );
+
+
+                    return;
+
+                }
+
                 Income income = new Income();
-
-
 
                 income.setAmount(amount);
                 income.setUserId(

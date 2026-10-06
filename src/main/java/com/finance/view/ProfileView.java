@@ -111,9 +111,17 @@ public class ProfileView {
             try{
 
 
-                user.setUsername(
-                        usernameField.getText()
-                );
+                if(usernameField.getText().isEmpty()){
+
+
+                    message.setText(
+                            "Username cannot be empty."
+                    );
+
+
+                    return;
+
+                }
 
 
 

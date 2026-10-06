@@ -130,7 +130,21 @@ public class RegisterView {
                 );
 
 
+                if(
+                        usernameField.getText().isEmpty()
+                                ||
+                                emailField.getText().isEmpty()
+                                ||
+                                passwordField.getText().isEmpty()
+                ){
 
+                    message.setText(
+                            "All fields are required."
+                    );
+
+                    return;
+
+                }
                 userService.register(user);
 
 
