@@ -41,4 +41,13 @@ public class TransactionRow {
     public double getAmount() {
         return amount;
     }
+
+    public String getFormattedAmount(){
+
+        return String.format(
+                "%.2f",
+                amount
+        );
+
+    }
 }
