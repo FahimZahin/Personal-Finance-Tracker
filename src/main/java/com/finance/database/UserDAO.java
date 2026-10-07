@@ -60,7 +60,24 @@ public class UserDAO {
         }
         catch(Exception e){
 
-            e.printStackTrace();
+
+            if(e.getMessage().contains("UNIQUE")){
+
+
+                System.out.println(
+                        "Email already exists."
+                );
+
+
+            }
+            else{
+
+
+                e.printStackTrace();
+
+
+            }
+
 
         }
 
