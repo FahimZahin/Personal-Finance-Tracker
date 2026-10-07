@@ -227,6 +227,53 @@ public class TransactionView {
                 }
         );
 
+        Button editButton =
+                new Button(
+                        "Edit Selected"
+                );
+
+        editButton.setOnAction(event -> {
+
+
+            TransactionRow selected =
+                    table.getSelectionModel()
+                            .getSelectedItem();
+
+
+
+            if(selected == null){
+
+
+                showAlert(
+                        "Please select a transaction first."
+                );
+
+
+                return;
+
+            }
+
+
+
+            EditTransactionView editView =
+                    new EditTransactionView();
+
+
+
+            stage.setScene(
+                    new Scene(
+                            editView.getView(
+                                    stage,
+                                    selected
+                            ),
+                            500,
+                            500
+                    )
+            );
+
+
+        });
+
 
 
 
@@ -271,6 +318,7 @@ public class TransactionView {
                         10,
                         searchField,
                         filterBox,
+                        editButton,
                         exportButton,
                         deleteButton,
                         backButton
