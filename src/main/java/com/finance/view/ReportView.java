@@ -8,6 +8,11 @@ import com.finance.service.ReportService;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+import com.finance.service.PdfReportService;
+
+import javafx.stage.FileChooser;
+
+import java.io.File;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -30,14 +35,16 @@ public class ReportView {
 
     private final ReportService reportService;
 
-
+    private final PdfReportService pdfReportService;
 
     public ReportView(){
-
 
         reportService =
                 new ReportService();
 
+
+        pdfReportService =
+                new PdfReportService();
 
     }
 
@@ -141,6 +148,9 @@ public class ReportView {
         Label savingsLabel =
                 new Label();
 
+        final double[] reportData =
+                new double[3];
+
 
 
 
@@ -151,6 +161,66 @@ public class ReportView {
                 new Button(
                         "Generate Report"
                 );
+
+        Button exportButton =
+                new Button(
+                        "Export PDF"
+                );
+
+        exportButton.setOnAction(event -> {
+
+
+            FileChooser chooser =
+                    new FileChooser();
+
+
+            chooser.setTitle(
+                    "Save Monthly Report"
+            );
+
+
+            chooser.getExtensionFilters()
+                    .add(
+                            new FileChooser.ExtensionFilter(
+                                    "PDF Files",
+                                    "*.pdf"
+                            )
+                    );
+
+
+
+            File file =
+                    chooser.showSaveDialog(
+                            stage
+                    );
+
+
+            if(file == null){
+
+                return;
+
+            }
+
+
+
+            pdfReportService.createReport(
+
+                    file,
+
+                    monthBox.getValue(),
+
+                    yearBox.getValue(),
+
+                    reportData[0],
+
+                    reportData[1],
+
+                    reportData[2]
+
+            );
+
+
+        });
 
 
 
@@ -181,6 +251,7 @@ public class ReportView {
 
 
 
+
             double expense =
                     reportService.getMonthlyExpense(
                             userId,
@@ -196,6 +267,10 @@ public class ReportView {
                             month,
                             year
                     );
+
+            reportData[0] = income;
+            reportData[1] = expense;
+            reportData[2] = savings;
 
 
 
@@ -273,12 +348,12 @@ public class ReportView {
                         monthBox,
                         yearBox,
                         generateButton,
+                        exportButton,
                         incomeLabel,
                         expenseLabel,
                         savingsLabel,
                         backButton
                 );
-
 
 
         layout.setPadding(
