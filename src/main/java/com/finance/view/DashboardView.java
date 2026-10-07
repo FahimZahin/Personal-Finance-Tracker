@@ -306,12 +306,29 @@ public class DashboardView {
 
         });
 
+        Button settingsButton =
+                new Button(
+                        "Settings"
+                );
+
+        settingsButton.setOnAction(event -> {
+
+
+            SettingsView settingsView =
+                    new SettingsView();
 
 
 
+            stage.setScene(
+                    new Scene(
+                            settingsView.getView(stage),
+                            600,
+                            500
+                    )
+            );
 
 
-
+        });
 
         Button logoutButton =
                 new Button(
@@ -358,6 +375,7 @@ public class DashboardView {
                         transactionButton,
                         reportButton,
                         profileButton,
+                        settingsButton,
                         logoutButton
                 );
 
