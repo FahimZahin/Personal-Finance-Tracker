@@ -1,8 +1,8 @@
 .root {
 
-    -fx-background-color: #f5f7fb;
-
     -fx-font-family: "Segoe UI";
+
+    -fx-background-color: #f5f7fb;
 
 }
 
@@ -10,59 +10,7 @@
 
 .label {
 
-    -fx-text-fill: #333333;
-
-}
-
-
-
-.title {
-
-    -fx-font-size: 28px;
-
-    -fx-font-weight: bold;
-
-}
-
-
-
-.card {
-
-    -fx-background-color: white;
-
-    -fx-background-radius: 15;
-
-    -fx-padding: 20;
-
-    -fx-effect:
-            dropshadow(
-                    gaussian,
-                    rgba(0,0,0,0.15),
-                    10,
-                    0,
-                    0,
-                    5
-            );
-
-}
-
-
-
-.card-title {
-
     -fx-font-size: 14px;
-
-    -fx-text-fill: #777777;
-
-}
-
-
-
-.card-value {
-
-    -fx-font-size: 24px;
-
-    -fx-font-weight: bold;
 
 }
 
@@ -74,9 +22,11 @@
 
     -fx-text-fill: white;
 
-    -fx-background-radius: 8;
+    -fx-font-size: 14px;
 
-    -fx-padding: 10 20;
+    -fx-padding: 10px 18px;
+
+    -fx-background-radius: 8px;
 
 }
 
@@ -90,10 +40,50 @@
 
 
 
-.chart {
+.text-field,
+.password-field {
 
-    -fx-background-color: white;
 
-    -fx-background-radius: 15;
+    -fx-font-size: 14px;
+
+    -fx-padding: 10px;
+
+    -fx-background-radius: 8px;
+
+
+}
+
+
+
+
+
+.combo-box {
+
+
+    -fx-font-size: 14px;
+
+    -fx-background-radius: 8px;
+
+
+}
+
+
+
+
+.table-view {
+
+
+    -fx-background-radius: 10px;
+
+}
+
+
+
+
+.table-column {
+
+
+    -fx-alignment: CENTER;
+
 
 }

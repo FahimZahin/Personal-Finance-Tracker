@@ -49,8 +49,15 @@ public class StatCard {
 
 
 
-        box.setMinWidth(
-                180
+        box.setMinWidth(220);
+        box.setMinHeight(120);
+
+        box.setStyle(
+                "-fx-background-color:white;"
+                        +
+                        "-fx-background-radius:15;"
+                        +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15),10,0,0,5);"
         );
 
 
