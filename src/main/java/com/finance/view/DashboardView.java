@@ -2,31 +2,23 @@ package com.finance.view;
 
 
 import com.finance.Session;
-import com.finance.model.CategoryExpense;
 import com.finance.service.DashboardService;
-import javafx.scene.chart.PieChart;
+
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.layout.HBox;
+
 
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-
-import javafx.scene.chart.XYChart;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+
 import javafx.stage.Stage;
-
-
-import java.util.List;
 
 
 
@@ -50,12 +42,15 @@ public class DashboardView {
 
 
 
+
     public VBox getView(Stage stage){
+
 
 
         int userId =
                 Session.getUser()
                         .getId();
+
 
 
 
@@ -71,16 +66,20 @@ public class DashboardView {
 
 
 
-        double totalIncome =
+
+
+        double income =
                 dashboardService.getTotalIncome(
                         userId
                 );
 
 
-        double totalExpense =
+
+        double expense =
                 dashboardService.getTotalExpense(
                         userId
                 );
+
 
 
         double balance =
@@ -89,25 +88,41 @@ public class DashboardView {
                 );
 
 
+
+
+
+
+
+        StatCard card =
+                new StatCard();
+
+
+
+
         VBox incomeCard =
-                createCard(
-                        "Income",
-                        String.valueOf(totalIncome)
+                card.create(
+                        "Total Income",
+                        String.valueOf(income)
                 );
+
 
 
         VBox expenseCard =
-                createCard(
-                        "Expense",
-                        String.valueOf(totalExpense)
+                card.create(
+                        "Total Expense",
+                        String.valueOf(expense)
                 );
+
 
 
         VBox balanceCard =
-                createCard(
+                card.create(
                         "Balance",
                         String.valueOf(balance)
                 );
+
+
+
 
 
 
@@ -120,6 +135,7 @@ public class DashboardView {
                 );
 
 
+
         cards.setAlignment(
                 Pos.CENTER
         );
@@ -128,115 +144,7 @@ public class DashboardView {
 
 
 
-        CategoryAxis xAxis =
-                new CategoryAxis();
 
-
-        NumberAxis yAxis =
-                new NumberAxis();
-
-
-
-        BarChart<String,Number> chart =
-                new BarChart<>(
-                        xAxis,
-                        yAxis
-                );
-
-        PieChart expensePieChart =
-                createExpensePieChart(userId);
-
-
-
-        chart.setTitle(
-                "Income vs Expense"
-        );
-
-
-
-        XYChart.Series<String,Number> series =
-                new XYChart.Series<>();
-
-
-        series.setName(
-                "Amount"
-        );
-
-
-
-        series.getData()
-                .add(
-                        new XYChart.Data<>(
-                                "Income",
-                                totalIncome
-                        )
-                );
-
-
-
-        series.getData()
-                .add(
-                        new XYChart.Data<>(
-                                "Expense",
-                                totalExpense
-                        )
-                );
-
-
-
-        chart.getData()
-                .add(series);
-
-
-
-
-        Label categoryTitle =
-                new Label(
-                        "Expense Categories"
-                );
-
-
-
-        VBox categoryBox =
-                new VBox(
-                        5
-                );
-
-
-
-        List<CategoryExpense> categories =
-                dashboardService.getExpenseByCategory(
-                        userId
-                );
-
-
-
-        for(CategoryExpense category : categories){
-
-
-            categoryBox.getChildren()
-                    .add(
-                            new Label(
-                                    category.getCategory()
-                                            +
-                                            " : "
-                                            +
-                                            category.getAmount()
-                            )
-                    );
-
-
-        }
-
-
-
-
-
-
-        Button expenseButton =
-                new Button(
-                        "Manage Expenses"
-                );
 
 
 
@@ -247,124 +155,11 @@ public class DashboardView {
 
 
 
-        Button transactionButton =
-                new Button(
-                        "Transactions"
-                );
-
-
-
-        Button logoutButton =
-                new Button(
-                        "Logout"
-                );
-
-        Button reportButton =
-                new Button(
-                        "Monthly Report"
-                );
-
-        reportButton.setOnAction(event -> {
-
-
-            ReportView reportView =
-                    new ReportView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            reportView.getView(stage),
-                            600,
-                            500
-                    )
-            );
-
-
-        });
-
-        Button profileButton =
-                new Button(
-                        "Profile"
-                );
-
-        profileButton.setOnAction(event -> {
-
-
-            ProfileView profileView =
-                    new ProfileView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            profileView.getView(stage),
-                            500,
-                            450
-                    )
-            );
-
-
-        });
-
-
-
-
-
-
-        expenseButton.setOnAction(event -> {
-
-
-            ExpenseView view =
-                    new ExpenseView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            view.getView(stage),
-                            500,
-                            500
-                    )
-            );
-
-
-        });
-
-
-
-
-
-
         incomeButton.setOnAction(event -> {
 
 
             IncomeView view =
                     new IncomeView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            view.getView(stage),
-                            500,
-                            500
-                    )
-            );
-
-
-        });
-
-
-
-
-
-
-        transactionButton.setOnAction(event -> {
-
-
-            TransactionView view =
-                    new TransactionView();
 
 
 
@@ -386,6 +181,144 @@ public class DashboardView {
 
 
 
+        Button expenseButton =
+                new Button(
+                        "Manage Expense"
+                );
+
+
+
+        expenseButton.setOnAction(event -> {
+
+
+            ExpenseView view =
+                    new ExpenseView();
+
+
+
+            stage.setScene(
+                    new Scene(
+                            view.getView(stage),
+                            700,
+                            500
+                    )
+            );
+
+
+        });
+
+
+
+
+
+
+
+
+        Button transactionButton =
+                new Button(
+                        "Transactions"
+                );
+
+
+
+        transactionButton.setOnAction(event -> {
+
+
+            TransactionView view =
+                    new TransactionView();
+
+
+
+            stage.setScene(
+                    new Scene(
+                            view.getView(stage),
+                            900,
+                            650
+                    )
+            );
+
+
+        });
+
+
+
+
+
+
+
+
+        Button reportButton =
+                new Button(
+                        "Monthly Report"
+                );
+
+
+
+        reportButton.setOnAction(event -> {
+
+
+            ReportView view =
+                    new ReportView();
+
+
+
+            stage.setScene(
+                    new Scene(
+                            view.getView(stage),
+                            600,
+                            500
+                    )
+            );
+
+
+        });
+
+
+
+
+
+
+
+
+        Button profileButton =
+                new Button(
+                        "Profile"
+                );
+
+
+
+        profileButton.setOnAction(event -> {
+
+
+            ProfileView view =
+                    new ProfileView();
+
+
+
+            stage.setScene(
+                    new Scene(
+                            view.getView(stage),
+                            600,
+                            500
+                    )
+            );
+
+
+        });
+
+
+
+
+
+
+
+
+        Button logoutButton =
+                new Button(
+                        "Logout"
+                );
+
+
 
         logoutButton.setOnAction(event -> {
 
@@ -393,14 +326,15 @@ public class DashboardView {
             Session.clear();
 
 
-            LoginView view =
+
+            LoginView login =
                     new LoginView();
 
 
 
             stage.setScene(
                     new Scene(
-                            view.getView(stage),
+                            login.getView(stage),
                             500,
                             400
                     )
@@ -415,11 +349,12 @@ public class DashboardView {
 
 
 
+
         HBox buttons =
                 new HBox(
                         10,
-                        expenseButton,
                         incomeButton,
+                        expenseButton,
                         transactionButton,
                         reportButton,
                         profileButton,
@@ -433,34 +368,26 @@ public class DashboardView {
         );
 
 
-        HBox charts =
-                new HBox(
-                        20,
-                        chart,
-                        expensePieChart
-                );
 
 
-        charts.setAlignment(
-                Pos.CENTER
-        );
+
 
 
 
         VBox layout =
                 new VBox(
-                        15,
+                        30,
                         welcome,
                         cards,
-                        charts,
                         buttons
                 );
 
 
 
         layout.setPadding(
-                new Insets(20)
+                new Insets(40)
         );
+
 
 
         layout.setAlignment(
@@ -472,100 +399,9 @@ public class DashboardView {
         return layout;
 
 
-    }
-
-    private VBox createCard(
-            String title,
-            String value
-    ){
-
-        Label titleLabel =
-                new Label(title);
-
-
-        titleLabel.getStyleClass()
-                .add(
-                        "card-title"
-                );
-
-
-        Label valueLabel =
-                new Label(value);
-
-
-        valueLabel.getStyleClass()
-                .add(
-                        "card-value"
-                );
-
-
-        VBox box =
-                new VBox(
-                        10,
-                        titleLabel,
-                        valueLabel
-                );
-
-
-        box.getStyleClass()
-                .add(
-                        "card"
-                );
-
-
-        box.setAlignment(
-                Pos.CENTER
-        );
-
-
-        return box;
 
     }
 
-    private PieChart createExpensePieChart(int userId){
-
-
-        PieChart pieChart =
-                new PieChart();
-
-
-
-        pieChart.setTitle(
-                "Expense Distribution"
-        );
-
-
-
-        List<CategoryExpense> categories =
-                dashboardService.getExpenseByCategory(userId);
-
-
-
-        for(CategoryExpense category : categories){
-
-
-            pieChart.getData()
-                    .add(
-                            new PieChart.Data(
-                                    category.getCategory(),
-                                    category.getAmount()
-                            )
-                    );
-
-
-        }
-
-
-
-        pieChart.setPrefSize(
-                400,
-                300
-        );
-
-
-        return pieChart;
-
-    }
 
 
 }
