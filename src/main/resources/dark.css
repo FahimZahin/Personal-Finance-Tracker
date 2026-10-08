@@ -1,0 +1,45 @@
+.root {
+
+    -fx-background-color: #1e1e1e;
+
+}
+
+
+.label {
+
+    -fx-text-fill: white;
+
+}
+
+
+.button {
+
+    -fx-background-color: #374151;
+
+    -fx-text-fill: white;
+
+}
+
+
+.text-field,
+.password-field {
+
+    -fx-background-color: #374151;
+
+    -fx-text-fill: white;
+
+}
+
+
+.combo-box {
+
+    -fx-background-color: #374151;
+
+}
+
+
+.table-view {
+
+    -fx-background-color: #252525;
+
+}

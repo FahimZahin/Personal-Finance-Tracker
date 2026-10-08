@@ -4,6 +4,7 @@ package com.finance.view;
 import com.finance.Session;
 import com.finance.model.UserSettings;
 import com.finance.service.SettingsService;
+import com.finance.ThemeManager;
 
 
 import javafx.geometry.Insets;
@@ -168,6 +169,21 @@ public class SettingsView {
                     updated
             );
 
+
+            Scene scene =
+                    saveButton.getScene();
+
+
+            ThemeManager.applyTheme(
+                    scene
+            );
+
+
+
+            ThemeManager.setDarkMode(
+                    themeBox.getValue()
+                            .equals("DARK")
+            );
 
 
             message.setText(
