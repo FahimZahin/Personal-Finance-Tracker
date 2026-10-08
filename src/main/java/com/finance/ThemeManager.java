@@ -20,16 +20,11 @@ public class ThemeManager {
 
 
 
-
-
     public static boolean isDarkMode(){
 
         return darkMode;
 
     }
-
-
-
 
 
 
@@ -57,22 +52,25 @@ public class ThemeManager {
         if(darkMode){
 
 
-            scene.getStylesheets()
-                    .add(
-                            ThemeManager.class
-                                    .getResource(
-                                            "/dark.css"
-                                    )
-                                    .toExternalForm()
-                    );
+            var resource =
+                    ThemeManager.class
+                            .getResource(
+                                    "/dark.css"
+                            );
+
+
+            if(resource != null){
+
+                scene.getStylesheets()
+                        .add(
+                                resource.toExternalForm()
+                        );
+
+            }
 
 
         }
 
-
-
     }
-
-
 
 }

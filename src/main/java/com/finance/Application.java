@@ -12,6 +12,11 @@ import javafx.stage.Stage;
 public class Application extends javafx.application.Application {
 
 
+    private static final double APP_WIDTH = 900;
+    private static final double APP_HEIGHT = 650;
+
+
+
     @Override
     public void start(Stage stage) {
 
@@ -19,15 +24,46 @@ public class Application extends javafx.application.Application {
         DatabaseInitializer.createTables();
 
 
+        stage.setTitle(
+                "Personal Finance Tracker"
+        );
+
+
+        stage.setWidth(APP_WIDTH);
+        stage.setHeight(APP_HEIGHT);
+
+        stage.setMinWidth(APP_WIDTH);
+        stage.setMinHeight(APP_HEIGHT);
+
+        stage.setMaxWidth(APP_WIDTH);
+        stage.setMaxHeight(APP_HEIGHT);
+
+
+
+        stage.sceneProperty().addListener(
+                (obs, oldScene, newScene) -> {
+
+                    if(newScene != null){
+
+                        ThemeManager.applyTheme(newScene);
+
+                    }
+
+                }
+        );
+
+
+
         LoginView loginView =
                 new LoginView();
+
 
 
         Scene scene =
                 new Scene(
                         loginView.getView(stage),
-                        900,
-                        650
+                        APP_WIDTH,
+                        APP_HEIGHT
                 );
 
 
@@ -39,9 +75,7 @@ public class Application extends javafx.application.Application {
                 );
 
 
-        stage.setTitle(
-                "Personal Finance Tracker"
-        );
+        ThemeManager.applyTheme(scene);
 
 
         stage.setScene(scene);
@@ -55,9 +89,7 @@ public class Application extends javafx.application.Application {
 
     public static void main(String[] args) {
 
-
         launch(args);
-
 
     }
 

@@ -22,9 +22,21 @@ public class StatCard {
                 new Label(title);
 
 
-
         Label valueLabel =
                 new Label(value);
+
+
+
+        titleLabel.setStyle(
+                "-fx-font-size:16px;"
+        );
+
+
+        valueLabel.setStyle(
+                "-fx-font-size:22px;"
+                        +
+                        "-fx-font-weight:bold;"
+        );
 
 
 
@@ -42,20 +54,19 @@ public class StatCard {
         );
 
 
-
         box.setAlignment(
                 Pos.CENTER
         );
 
 
-
         box.setMinWidth(220);
+
         box.setMinHeight(120);
 
+
+
         box.setStyle(
-                "-fx-background-color:white;"
-                        +
-                        "-fx-background-radius:15;"
+                "-fx-background-radius:15;"
                         +
                         "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15),10,0,0,5);"
         );
@@ -63,7 +74,6 @@ public class StatCard {
 
 
         return box;
-
 
     }
 
