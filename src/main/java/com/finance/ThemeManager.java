@@ -42,9 +42,7 @@ public class ThemeManager {
         scene.getStylesheets()
                 .removeIf(
                         css ->
-                                css.contains(
-                                        "dark.css"
-                                )
+                                css.contains("dark.css")
                 );
 
 
@@ -54,23 +52,27 @@ public class ThemeManager {
 
             var resource =
                     ThemeManager.class
-                            .getResource(
-                                    "/dark.css"
-                            );
+                            .getResource("/dark.css");
+
 
 
             if(resource != null){
+
 
                 scene.getStylesheets()
                         .add(
                                 resource.toExternalForm()
                         );
 
+
             }
 
 
         }
 
+
     }
+
+
 
 }

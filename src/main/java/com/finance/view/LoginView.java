@@ -8,6 +8,9 @@ import com.finance.Session;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+import com.finance.ThemeManager;
+import com.finance.model.UserSettings;
+import com.finance.service.SettingsService;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -130,17 +133,34 @@ public class LoginView {
 
             User user =
                     userService.login(
-                            email,
-                            password
+                            emailField.getText(),
+                            passwordField.getText()
                     );
-
-
 
 
             if(user != null){
 
 
                 Session.setUser(user);
+
+
+
+                SettingsService settingsService =
+                        new SettingsService();
+
+
+
+                UserSettings settings =
+                        settingsService.getSettings(
+                                user.getId()
+                        );
+
+
+
+                ThemeManager.setDarkMode(
+                        settings.getTheme()
+                                .equals("DARK")
+                );
 
 
 
@@ -152,12 +172,18 @@ public class LoginView {
                 Scene scene =
                         new Scene(
                                 dashboard.getView(stage),
-                                700,
-                                500
+                                900,
+                                650
                         );
 
 
+
+                ThemeManager.applyTheme(scene);
+
+
+
                 stage.setScene(scene);
+
 
 
             }
