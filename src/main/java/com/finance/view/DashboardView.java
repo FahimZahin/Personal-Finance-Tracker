@@ -4,7 +4,7 @@ package com.finance.view;
 import com.finance.Session;
 import com.finance.service.DashboardService;
 
-
+import com.finance.CurrencyManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
@@ -102,7 +102,7 @@ public class DashboardView {
         VBox incomeCard =
                 card.create(
                         "Total Income",
-                        String.valueOf(income)
+                        CurrencyManager.format(income)
                 );
 
 
@@ -110,7 +110,7 @@ public class DashboardView {
         VBox expenseCard =
                 card.create(
                         "Total Expense",
-                        String.valueOf(expense)
+                        CurrencyManager.format(expense)
                 );
 
 
@@ -118,7 +118,7 @@ public class DashboardView {
         VBox balanceCard =
                 card.create(
                         "Balance",
-                        String.valueOf(balance)
+                        CurrencyManager.format(balance)
                 );
 
 

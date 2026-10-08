@@ -7,7 +7,7 @@ import com.finance.service.UserService;
 import com.finance.Session;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
+import com.finance.CurrencyManager;
 import com.finance.ThemeManager;
 import com.finance.model.UserSettings;
 import com.finance.service.SettingsService;
@@ -154,6 +154,10 @@ public class LoginView {
                         settingsService.getSettings(
                                 user.getId()
                         );
+
+                CurrencyManager.setCurrency(
+                        settings.getCurrency()
+                );
 
 
 
