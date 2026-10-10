@@ -7,6 +7,7 @@ import com.finance.model.Income;
 import com.finance.service.CsvExportService;
 import com.finance.service.ExpenseService;
 import com.finance.service.IncomeService;
+import com.finance.service.TransactionService;
 
 
 import javafx.collections.FXCollections;
@@ -45,6 +46,8 @@ public class TransactionView {
 
     private final CsvExportService csvExportService;
 
+    private final TransactionService transactionService;
+
 
 
     private final TableView<TransactionRow> table;
@@ -79,6 +82,10 @@ public class TransactionView {
 
         csvExportService =
                 new CsvExportService();
+
+
+        transactionService =
+                new TransactionService();
 
 
 
@@ -566,23 +573,8 @@ public class TransactionView {
     private void applyFilter(){
 
 
-
         String keyword =
                 searchField.getText();
-
-
-
-        if(keyword == null){
-
-            keyword = "";
-
-        }
-
-
-
-        keyword =
-                keyword.toLowerCase();
-
 
 
 
@@ -591,59 +583,20 @@ public class TransactionView {
 
 
 
-
-
         transactionList.clear();
 
 
 
-
-        for(TransactionRow transaction : allTransactions){
-
-
-
-            boolean matchesText =
-                    transaction.getDetail()
-                            .toLowerCase()
-                            .contains(
-                                    keyword
-                            );
-
-
-
-            boolean matchesType =
-                    selectedType.equals("All")
-                            ||
-                            transaction.getType()
-                                    .equals(selectedType);
-
-
-
-
-
-            if(matchesText && matchesType){
-
-
-                transactionList.add(
-                        transaction
-                );
-
-
-            }
-
-
-
-        }
-
+        transactionList.addAll(
+                transactionService.filter(
+                        allTransactions,
+                        keyword,
+                        selectedType
+                )
+        );
 
 
     }
-
-
-
-
-
-
 
 
     private void deleteSelected(){
