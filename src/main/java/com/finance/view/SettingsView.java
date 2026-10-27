@@ -5,6 +5,7 @@ import com.finance.Session;
 import com.finance.model.UserSettings;
 import com.finance.service.SettingsService;
 import com.finance.ThemeManager;
+import com.finance.CurrencyManager;
 
 
 import javafx.geometry.Insets;
@@ -165,15 +166,32 @@ public class SettingsView {
 
 
 
-            ThemeManager.setDarkMode(
-                    updated.getTheme().equals("DARK")
+            settingsService.saveSettings(updated);
+
+
+
+            // FIX: Update the live currency symbol immediately
+            CurrencyManager.setCurrency(
+                    updated.getCurrency()
             );
+
+
+
+            ThemeManager.setDarkMode(
+                    updated.getTheme()
+                            .equals("DARK")
+            );
+
+
 
             ThemeManager.applyTheme(
                     saveButton.getScene()
             );
 
-            message.setText("Settings saved.");
+
+            message.setText(
+                    "Settings saved."
+            );
 
 
 
