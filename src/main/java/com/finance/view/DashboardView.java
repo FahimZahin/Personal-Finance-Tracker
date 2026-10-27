@@ -4,6 +4,7 @@ package com.finance.view;
 import com.finance.Session;
 import com.finance.service.DashboardService;
 
+
 import com.finance.CurrencyManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,6 +17,7 @@ import javafx.scene.control.Label;
 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.chart.BarChart;
 
 
 import javafx.stage.Stage;
@@ -86,6 +88,45 @@ public class DashboardView {
                 dashboardService.getBalance(
                         userId
                 );
+
+        double savingsRate =
+                dashboardService.getSavingsRate(userId);
+
+
+        String topCategory =
+                dashboardService.getTopExpenseCategory(userId);
+
+
+        Label savingsLabel =
+                new Label(
+                        "Savings Rate: "
+                                +
+                                String.format("%.2f%%", savingsRate)
+                );
+
+
+        Label topExpenseLabel =
+                new Label(
+                        (topCategory == null || topCategory.isEmpty())
+                                ?
+                                "Top Expense: None"
+                                :
+                                "Top Expense: "
+                                        +
+                                        topCategory
+                );
+
+
+        DashboardChart dashboardChart =
+                new DashboardChart();
+
+
+        BarChart<String, Number> chart =
+                dashboardChart.createIncomeExpenseChart(
+                        income,
+                        expense
+                );
+
 
 
 
@@ -397,6 +438,9 @@ public class DashboardView {
                         30,
                         welcome,
                         cards,
+                        savingsLabel,
+                        topExpenseLabel,
+                        chart,
                         buttons
                 );
 

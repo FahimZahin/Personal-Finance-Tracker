@@ -168,58 +168,30 @@ public class ReportView {
                 );
 
         exportButton.setOnAction(event -> {
-
-
-            FileChooser chooser =
-                    new FileChooser();
-
-
-            chooser.setTitle(
-                    "Save Monthly Report"
-            );
-
-
-            chooser.getExtensionFilters()
-                    .add(
-                            new FileChooser.ExtensionFilter(
-                                    "PDF Files",
-                                    "*.pdf"
-                            )
-                    );
-
-
-
-            File file =
-                    chooser.showSaveDialog(
-                            stage
-                    );
-
-
-            if(file == null){
-
+            if (reportData[0] == 0 && reportData[1] == 0 && reportData[2] == 0) {
+                // Prevents exporting a blank report
                 return;
-
             }
 
-
-
-            pdfReportService.createReport(
-
-                    file,
-
-                    monthBox.getValue(),
-
-                    yearBox.getValue(),
-
-                    reportData[0],
-
-                    reportData[1],
-
-                    reportData[2]
-
+            FileChooser chooser = new FileChooser();
+            chooser.setTitle("Save Monthly Report");
+            chooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
             );
 
+            File file = chooser.showSaveDialog(stage);
+            if(file == null){
+                return;
+            }
 
+            pdfReportService.createReport(
+                    file,
+                    monthBox.getValue(),
+                    yearBox.getValue(),
+                    reportData[0],
+                    reportData[1],
+                    reportData[2]
+            );
         });
 
 

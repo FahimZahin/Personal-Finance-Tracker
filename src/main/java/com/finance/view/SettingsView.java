@@ -165,41 +165,15 @@ public class SettingsView {
 
 
 
-            settingsService.saveSettings(updated);
-
-
-
             ThemeManager.setDarkMode(
-                    updated.getTheme()
-                            .equals("DARK")
+                    updated.getTheme().equals("DARK")
             );
-
-
 
             ThemeManager.applyTheme(
                     saveButton.getScene()
             );
 
-
-            Scene scene =
-                    saveButton.getScene();
-
-
-            ThemeManager.applyTheme(
-                    scene
-            );
-
-
-
-            ThemeManager.setDarkMode(
-                    themeBox.getValue()
-                            .equals("DARK")
-            );
-
-
-            message.setText(
-                    "Settings saved."
-            );
+            message.setText("Settings saved.");
 
 
 

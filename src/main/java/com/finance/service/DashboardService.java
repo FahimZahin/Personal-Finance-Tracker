@@ -176,5 +176,72 @@ public class DashboardService {
 
     }
 
+    public double getSavingsRate(int userId){
+
+        double income =
+                getTotalIncome(userId);
+
+
+        if(income <= 0){
+
+            return 0;
+
+        }
+
+
+        double expense =
+                getTotalExpense(userId);
+
+
+        double savings =
+                income - expense;
+
+
+        return (savings / income) * 100;
+
+    }
+
+    public String getTopExpenseCategory(int userId){
+
+
+        var categories =
+                getExpenseByCategory(userId);
+
+
+
+        String topCategory =
+                "None";
+
+
+        double highest =
+                0;
+
+
+
+        for(var item : categories){
+
+
+            if(item.getAmount() > highest){
+
+
+                highest =
+                        item.getAmount();
+
+
+                topCategory =
+                        item.getCategory();
+
+
+            }
+
+
+        }
+
+
+
+        return topCategory;
+
+    }
+
 
 }

@@ -96,10 +96,6 @@ public class IncomeView {
 
 
 
-        Button deleteButton = new Button(
-                "Delete Income"
-        );
-
         Button backButton = new Button(
                 "Back to Dashboard"
         );
@@ -245,57 +241,6 @@ public class IncomeView {
 
 
 
-
-
-        // Delete income
-
-        deleteButton.setOnAction(event -> {
-
-
-
-            try {
-
-
-
-                int id =
-                        Integer.parseInt(
-                                amountField.getText()
-                        );
-
-
-
-                incomeService.deleteIncome(id);
-
-
-
-                message.setText(
-                        "Income deleted successfully!"
-                );
-
-
-
-            } catch(Exception e) {
-
-
-
-                message.setText(
-                        "Invalid ID"
-                );
-
-
-
-            }
-
-
-
-        });
-
-
-
-
-
-
-
         VBox layout = new VBox(
                 15,
                 title,
@@ -304,7 +249,6 @@ public class IncomeView {
                 descriptionField,
                 datePicker,
                 saveButton,
-                deleteButton,
                 backButton,
                 message
         );
