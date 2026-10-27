@@ -1,469 +1,74 @@
 package com.finance.view;
 
-
 import com.finance.Session;
 import com.finance.service.DashboardService;
-
-
 import com.finance.CurrencyManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
-
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-
-
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.chart.BarChart;
-
-
 import javafx.stage.Stage;
-
-
 
 public class DashboardView {
 
-
     private final DashboardService dashboardService;
 
-
-
     public DashboardView(){
-
-
-        dashboardService =
-                new DashboardService();
-
-
+        dashboardService = new DashboardService();
     }
-
-
-
-
-
 
     public VBox getView(Stage stage){
 
+        int userId = Session.getUser().getId();
 
-
-        int userId =
-                Session.getUser()
-                        .getId();
-
-
-
-
-
-        Label welcome =
-                new Label(
-                        "Welcome, "
-                                +
-                                Session.getUser()
-                                        .getUsername()
-                );
-
-
-
-
-
-
-        double income =
-                dashboardService.getTotalIncome(
-                        userId
-                );
-
-
-
-        double expense =
-                dashboardService.getTotalExpense(
-                        userId
-                );
-
-
-
-        double balance =
-                dashboardService.getBalance(
-                        userId
-                );
-
-        double savingsRate =
-                dashboardService.getSavingsRate(userId);
-
-
-        String topCategory =
-                dashboardService.getTopExpenseCategory(userId);
-
-
-        Label savingsLabel =
-                new Label(
-                        "Savings Rate: "
-                                +
-                                String.format("%.2f%%", savingsRate)
-                );
-
-
-        Label topExpenseLabel =
-                new Label(
-                        (topCategory == null || topCategory.isEmpty())
-                                ?
-                                "Top Expense: None"
-                                :
-                                "Top Expense: "
-                                        +
-                                        topCategory
-                );
-
-
-        DashboardChart dashboardChart =
-                new DashboardChart();
-
-
-        BarChart<String, Number> chart =
-                dashboardChart.createIncomeExpenseChart(
-                        income,
-                        expense
-                );
-
-
-
-
-
-
-
-
-        StatCard card =
-                new StatCard();
-
-
-
-
-        VBox incomeCard =
-                card.create(
-                        "Total Income",
-                        CurrencyManager.format(income)
-                );
-
-
-
-        VBox expenseCard =
-                card.create(
-                        "Total Expense",
-                        CurrencyManager.format(expense)
-                );
-
-
-
-        VBox balanceCard =
-                card.create(
-                        "Balance",
-                        CurrencyManager.format(balance)
-                );
-
-
-
-
-
-
-        HBox cards =
-                new HBox(
-                        20,
-                        incomeCard,
-                        expenseCard,
-                        balanceCard
-                );
-
-
-
-        cards.setAlignment(
-                Pos.CENTER
+        Label welcome = new Label(
+                "Welcome, " + Session.getUser().getUsername()
         );
 
-
-
-
-
-
-
-
-
-        Button incomeButton =
-                new Button(
-                        "Manage Income"
-                );
-
-
-
-        incomeButton.setOnAction(event -> {
-
-
-            IncomeView view =
-                    new IncomeView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            view.getView(stage),
-                            700,
-                            500
-                    )
-            );
-
-
-        });
-
-
-
-
-
-
-
-
-        Button expenseButton =
-                new Button(
-                        "Manage Expense"
-                );
-
-
-
-        expenseButton.setOnAction(event -> {
-
-
-            ExpenseView view =
-                    new ExpenseView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            view.getView(stage),
-                            700,
-                            500
-                    )
-            );
-
-
-        });
-
-
-
-
-
-
-
-
-        Button transactionButton =
-                new Button(
-                        "Transactions"
-                );
-
-
-
-        transactionButton.setOnAction(event -> {
-
-
-            TransactionView view =
-                    new TransactionView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            view.getView(stage),
-                            900,
-                            650
-                    )
-            );
-
-
-        });
-
-
-
-
-
-
-
-
-        Button reportButton =
-                new Button(
-                        "Monthly Report"
-                );
-
-
-
-        reportButton.setOnAction(event -> {
-
-
-            ReportView view =
-                    new ReportView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            view.getView(stage),
-                            600,
-                            500
-                    )
-            );
-
-
-        });
-
-
-
-
-
-
-
-
-        Button profileButton =
-                new Button(
-                        "Profile"
-                );
-
-
-
-        profileButton.setOnAction(event -> {
-
-
-            ProfileView view =
-                    new ProfileView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            view.getView(stage),
-                            600,
-                            500
-                    )
-            );
-
-
-        });
-
-        Button settingsButton =
-                new Button(
-                        "Settings"
-                );
-
-        settingsButton.setOnAction(event -> {
-
-
-            SettingsView settingsView =
-                    new SettingsView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            settingsView.getView(stage),
-                            600,
-                            500
-                    )
-            );
-
-
-        });
-
-        Button logoutButton =
-                new Button(
-                        "Logout"
-                );
-
-
-
-        logoutButton.setOnAction(event -> {
-
-
-            Session.clear();
-
-
-
-            LoginView login =
-                    new LoginView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            login.getView(stage),
-                            500,
-                            400
-                    )
-            );
-
-
-        });
-
-
-
-
-
-
-
-
-        HBox buttons =
-                new HBox(
-                        10,
-                        incomeButton,
-                        expenseButton,
-                        transactionButton,
-                        reportButton,
-                        profileButton,
-                        settingsButton,
-                        logoutButton
-                );
-
-
-
-        buttons.setAlignment(
-                Pos.CENTER
+        double income = dashboardService.getTotalIncome(userId);
+        double expense = dashboardService.getTotalExpense(userId);
+        double balance = dashboardService.getBalance(userId);
+        double savingsRate = dashboardService.getSavingsRate(userId);
+        String topCategory = dashboardService.getTopExpenseCategory(userId);
+
+        Label savingsLabel = new Label(
+                "Savings Rate: " + String.format("%.2f%%", savingsRate)
         );
 
-
-
-
-
-
-
-
-        VBox layout =
-                new VBox(
-                        30,
-                        welcome,
-                        cards,
-                        savingsLabel,
-                        topExpenseLabel,
-                        chart,
-                        buttons
-                );
-
-
-
-        layout.setPadding(
-                new Insets(40)
+        Label topExpenseLabel = new Label(
+                (topCategory == null || topCategory.isEmpty())
+                        ? "Top Expense: None"
+                        : "Top Expense: " + topCategory
         );
 
+        DashboardChart dashboardChart = new DashboardChart();
+        BarChart<String, Number> chart = dashboardChart.createIncomeExpenseChart(income, expense);
 
+        StatCard card = new StatCard();
+        VBox incomeCard = card.create("Total Income", CurrencyManager.format(income));
+        VBox expenseCard = card.create("Total Expense", CurrencyManager.format(expense));
+        VBox balanceCard = card.create("Balance", CurrencyManager.format(balance));
 
-        layout.setAlignment(
-                Pos.CENTER
+        // FIX: Using FlowPane instead of HBox so cards wrap nicely if the screen is narrow
+        FlowPane cards = new FlowPane(20, 20);
+        cards.setAlignment(Pos.CENTER);
+        cards.getChildren().addAll(incomeCard, expenseCard, balanceCard);
+
+        VBox layout = new VBox(
+                30,
+                welcome,
+                cards,
+                savingsLabel,
+                topExpenseLabel,
+                chart
         );
 
-
+        // FIX: Reduced padding from 40 to 15 to free up horizontal space
+        layout.setPadding(new Insets(15));
+        layout.setAlignment(Pos.CENTER);
 
         return layout;
-
-
-
     }
-
-
-
 }

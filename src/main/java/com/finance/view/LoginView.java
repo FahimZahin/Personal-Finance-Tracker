@@ -5,6 +5,7 @@ import com.finance.model.User;
 import com.finance.service.UserService;
 
 import com.finance.Session;
+import com.finance.AppConstants;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import com.finance.CurrencyManager;
@@ -133,9 +134,11 @@ public class LoginView {
 
             User user =
                     userService.login(
-                            emailField.getText(),
-                            passwordField.getText()
+                            email,
+                            password
                     );
+
+
 
 
             if(user != null){
@@ -168,25 +171,26 @@ public class LoginView {
 
 
 
-                DashboardView dashboard =
-                        new DashboardView();
+                // ON SUCCESSFUL LOGIN: Load the new Sidebar Layout
+                MainLayout mainLayout = new MainLayout(stage);
 
+                // Set the dashboard as the default starting screen in the center
+                mainLayout.setContent(new DashboardView().getView(stage));
 
+                Scene mainScene = new Scene(
+                        mainLayout.getLayout(),
+                        AppConstants.WIDTH,
+                        AppConstants.HEIGHT
+                );
 
-                Scene scene =
-                        new Scene(
-                                dashboard.getView(stage),
-                                900,
-                                650
-                        );
+                // Make sure the CSS is applied to the new layout
+                java.net.URL styleResource = getClass().getResource("/style.css");
+                if (styleResource != null) {
+                    mainScene.getStylesheets().add(styleResource.toExternalForm());
+                }
 
-
-
-                ThemeManager.applyTheme(scene);
-
-
-
-                stage.setScene(scene);
+                ThemeManager.applyTheme(mainScene);
+                stage.setScene(mainScene);
 
 
 
