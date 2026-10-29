@@ -6,7 +6,7 @@ import com.finance.CurrencyManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.chart.BarChart;
 import javafx.stage.Stage;
@@ -23,9 +23,9 @@ public class DashboardView {
 
         int userId = Session.getUser().getId();
 
-        Label welcome = new Label(
-                "Welcome, " + Session.getUser().getUsername()
-        );
+        Label welcome = new Label("Welcome, " + Session.getUser().getUsername());
+        // Force text color to be visible
+        welcome.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
         double income = dashboardService.getTotalIncome(userId);
         double expense = dashboardService.getTotalExpense(userId);
@@ -33,31 +33,35 @@ public class DashboardView {
         double savingsRate = dashboardService.getSavingsRate(userId);
         String topCategory = dashboardService.getTopExpenseCategory(userId);
 
-        Label savingsLabel = new Label(
-                "Savings Rate: " + String.format("%.2f%%", savingsRate)
-        );
+        Label savingsLabel = new Label("Savings Rate: " + String.format("%.2f%%", savingsRate));
+        savingsLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
 
         Label topExpenseLabel = new Label(
                 (topCategory == null || topCategory.isEmpty())
                         ? "Top Expense: None"
                         : "Top Expense: " + topCategory
         );
+        topExpenseLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
 
         DashboardChart dashboardChart = new DashboardChart();
         BarChart<String, Number> chart = dashboardChart.createIncomeExpenseChart(income, expense);
+        // Lock chart dimensions so it doesn't stretch off the screen
+        chart.setPrefSize(500, 300);
+        chart.setMaxWidth(600);
 
+        // Generate the styled cards (Green for income, Red for expense, Blue for balance)
         StatCard card = new StatCard();
-        VBox incomeCard = card.create("Total Income", CurrencyManager.format(income));
-        VBox expenseCard = card.create("Total Expense", CurrencyManager.format(expense));
-        VBox balanceCard = card.create("Balance", CurrencyManager.format(balance));
+        VBox incomeCard = card.create("Total Income", CurrencyManager.format(income), "#27ae60");
+        VBox expenseCard = card.create("Total Expense", CurrencyManager.format(expense), "#e74c3c");
+        VBox balanceCard = card.create("Balance", CurrencyManager.format(balance), "#2980b9");
 
-        // FIX: Using FlowPane instead of HBox so cards wrap nicely if the screen is narrow
-        FlowPane cards = new FlowPane(20, 20);
+        // Use HBox to force them onto exactly one row
+        HBox cards = new HBox(20);
         cards.setAlignment(Pos.CENTER);
         cards.getChildren().addAll(incomeCard, expenseCard, balanceCard);
 
         VBox layout = new VBox(
-                30,
+                25,
                 welcome,
                 cards,
                 savingsLabel,
@@ -65,9 +69,9 @@ public class DashboardView {
                 chart
         );
 
-        // FIX: Reduced padding from 40 to 15 to free up horizontal space
-        layout.setPadding(new Insets(15));
-        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(20));
+        // Align TOP_CENTER so it anchors nicely to the top of the scroll pane
+        layout.setAlignment(Pos.TOP_CENTER);
 
         return layout;
     }
