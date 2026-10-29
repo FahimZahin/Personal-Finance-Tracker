@@ -1,277 +1,83 @@
 package com.finance.view;
 
-
-import com.finance.Session;
-import com.finance.model.UserSettings;
-import com.finance.service.SettingsService;
-import com.finance.ThemeManager;
 import com.finance.CurrencyManager;
-
+import com.finance.ThemeManager;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
-
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-
-
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-
-
 import javafx.stage.Stage;
-
-
 
 public class SettingsView {
 
-
-
-    private final SettingsService settingsService;
-
-
-
-
-    public SettingsView(){
-
-
-        settingsService =
-                new SettingsService();
-
-
-    }
-
-
-
-
-
-
-
-
-    public VBox getView(Stage stage){
-
-
-
-        int userId =
-                Session.getUser()
-                        .getId();
-
-
-
-
-
-        Label title =
-                new Label(
-                        "Settings"
-                );
-
-
-
-
-
-
-        ComboBox<String> currencyBox =
-                new ComboBox<>();
-
-
-        currencyBox.getItems()
-                .addAll(
-                        "৳",
-                        "$",
-                        "€",
-                        "£"
-                );
-
-
-
-
-
-
-        ComboBox<String> themeBox =
-                new ComboBox<>();
-
-
-        themeBox.getItems()
-                .addAll(
-                        "LIGHT",
-                        "DARK"
-                );
-
-
-
-
-
-
-
-        UserSettings settings =
-                settingsService.getSettings(
-                        userId
-                );
-
-
-
-        currencyBox.setValue(
-                settings.getCurrency()
-        );
-
-
-        themeBox.setValue(
-                settings.getTheme()
-        );
-
-
-
-
-
-
-        Label message =
-                new Label();
-
-
-
-
-
-
-        Button saveButton =
-                new Button(
-                        "Save Settings"
-                );
-
-
+    public VBox getView(Stage stage) {
+
+        Label title = new Label("Settings");
+        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+
+        // 1. Currency Dropdown
+        Label currencyLabel = new Label("Currency:");
+        currencyLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        ComboBox<String> currencyBox = new ComboBox<>();
+        currencyBox.getItems().addAll("৳", "$", "€", "£");
+        currencyBox.setValue(CurrencyManager.getCurrency());
+        currencyBox.setPrefWidth(120);
+
+        // 2. Theme Dropdown
+        Label themeLabel = new Label("Theme:");
+        themeLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        ComboBox<String> themeBox = new ComboBox<>();
+        themeBox.getItems().addAll("LIGHT", "DARK");
+        themeBox.setValue(ThemeManager.isDarkMode() ? "DARK" : "LIGHT");
+        themeBox.setPrefWidth(120);
+
+        // Form Layout
+        GridPane grid = new GridPane();
+        grid.setHgap(15);
+        grid.setVgap(15);
+        grid.setAlignment(Pos.CENTER);
+
+        grid.add(currencyLabel, 0, 0);
+        grid.add(currencyBox, 1, 0);
+        grid.add(themeLabel, 0, 1);
+        grid.add(themeBox, 1, 1);
+
+        // 3. Save Button
+        Button saveButton = new Button("Save Settings");
+        saveButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 8 20; -fx-background-radius: 5; -fx-cursor: hand;");
+
+        Label statusLabel = new Label();
 
         saveButton.setOnAction(event -> {
+            // Save Currency
+            if (currencyBox.getValue() != null) {
+                CurrencyManager.setCurrency(currencyBox.getValue());
+            }
 
+            // Save Theme State
+            String selectedTheme = themeBox.getValue();
+            boolean isDark = "DARK".equalsIgnoreCase(selectedTheme);
+            ThemeManager.setDarkMode(isDark);
 
+            // Re-apply Theme directly to current Scene
+            if (stage != null && stage.getScene() != null) {
+                ThemeManager.applyTheme(stage.getScene());
+            }
 
-            UserSettings updated =
-                    new UserSettings();
-
-
-
-            updated.setUserId(
-                    userId
-            );
-
-
-            updated.setCurrency(
-                    currencyBox.getValue()
-            );
-
-
-            updated.setTheme(
-                    themeBox.getValue()
-            );
-
-
-
-            settingsService.saveSettings(updated);
-
-
-
-            // FIX: Update the live currency symbol immediately
-            CurrencyManager.setCurrency(
-                    updated.getCurrency()
-            );
-
-
-
-            ThemeManager.setDarkMode(
-                    updated.getTheme()
-                            .equals("DARK")
-            );
-
-
-
-            ThemeManager.applyTheme(
-                    saveButton.getScene()
-            );
-
-
-            message.setText(
-                    "Settings saved."
-            );
-
-
-
+            statusLabel.setText("Settings saved successfully!");
+            statusLabel.setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
         });
 
-
-
-
-
-
-
-
-        Button backButton =
-                new Button(
-                        "Back Dashboard"
-                );
-
-
-
-        backButton.setOnAction(event -> {
-
-
-
-            DashboardView dashboard =
-                    new DashboardView();
-
-
-
-            stage.setScene(
-                    new Scene(
-                            dashboard.getView(stage),
-                            900,
-                            650
-                    )
-            );
-
-
-
-        });
-
-
-
-
-
-
-
-
-        VBox layout =
-                new VBox(
-                        20,
-                        title,
-                        new Label("Currency"),
-                        currencyBox,
-                        new Label("Theme"),
-                        themeBox,
-                        saveButton,
-                        backButton,
-                        message
-                );
-
-
-
-        layout.setPadding(
-                new Insets(30)
-        );
-
-
-
-        layout.setAlignment(
-                Pos.CENTER
-        );
-
-
+        VBox layout = new VBox(25, title, grid, saveButton, statusLabel);
+        layout.setPadding(new Insets(40));
+        layout.setAlignment(Pos.TOP_CENTER);
 
         return layout;
-
-
-
     }
-
-
-
 }

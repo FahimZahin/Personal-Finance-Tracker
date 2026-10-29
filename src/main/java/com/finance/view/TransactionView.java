@@ -24,6 +24,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 
@@ -117,6 +118,10 @@ public class TransactionView {
                         "Transactions"
                 );
 
+        title.setStyle(
+                "-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"
+        );
+
 
 
 
@@ -127,6 +132,12 @@ public class TransactionView {
         searchField.setPromptText(
                 "Search details..."
         );
+
+        searchField.setStyle(
+                "-fx-font-size: 14px; -fx-padding: 8; -fx-border-color: #bdc3c7; -fx-border-radius: 4;"
+        );
+
+        searchField.setPrefWidth(200);
 
 
 
@@ -145,6 +156,10 @@ public class TransactionView {
 
         filterBox.setValue(
                 "All"
+        );
+
+        filterBox.setStyle(
+                "-fx-font-size: 14px; -fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-radius: 4;"
         );
 
 
@@ -198,6 +213,10 @@ public class TransactionView {
                         "Export CSV"
                 );
 
+        exportButton.setStyle(
+                "-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15; -fx-background-radius: 4; -fx-cursor: hand;"
+        );
+
 
 
         exportButton.setOnAction(
@@ -222,6 +241,10 @@ public class TransactionView {
                         "Delete Selected"
                 );
 
+        deleteButton.setStyle(
+                "-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15; -fx-background-radius: 4; -fx-cursor: hand;"
+        );
+
 
 
         deleteButton.setOnAction(
@@ -238,6 +261,10 @@ public class TransactionView {
                 new Button(
                         "Edit Selected"
                 );
+
+        editButton.setStyle(
+                "-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 15; -fx-background-radius: 4; -fx-cursor: hand;"
+        );
 
         editButton.setOnAction(event -> {
 
@@ -286,55 +313,26 @@ public class TransactionView {
 
 
 
-
-        Button backButton =
-                new Button(
-                        "Back Dashboard"
-                );
-
-
-
-        backButton.setOnAction(
-                event -> {
-
-
-                    DashboardView dashboard =
-                            new DashboardView();
-
-
-
-                    stage.setScene(
-                            new Scene(
-                                    dashboard.getView(stage),
-                                    900,
-                                    650
-                            )
-                    );
-
-
-                }
-        );
-
-
-
+        editButton.setMinWidth(javafx.scene.layout.Region.USE_PREF_SIZE);
+        exportButton.setMinWidth(javafx.scene.layout.Region.USE_PREF_SIZE);
+        deleteButton.setMinWidth(javafx.scene.layout.Region.USE_PREF_SIZE);
 
 
 
         HBox controls =
                 new HBox(
-                        10,
+                        12,
                         searchField,
                         filterBox,
                         editButton,
                         exportButton,
-                        deleteButton,
-                        backButton
+                        deleteButton
                 );
 
 
 
         controls.setAlignment(
-                Pos.CENTER
+                Pos.CENTER_LEFT
         );
 
 
@@ -360,8 +358,10 @@ public class TransactionView {
 
 
         layout.setAlignment(
-                Pos.CENTER
+                Pos.TOP_LEFT
         );
+
+        VBox.setVgrow(table, Priority.ALWAYS);
 
 
 
@@ -477,6 +477,10 @@ public class TransactionView {
 
         table.setItems(
                 transactionList
+        );
+
+        table.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY
         );
 
 

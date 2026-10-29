@@ -3,23 +3,20 @@ package com.finance.view;
 
 import com.finance.model.Expense;
 import com.finance.service.ExpenseService;
-
 import com.finance.Session;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
+import javafx.stage.Stage;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-
-import javafx.stage.Stage;
 
 
 import java.time.LocalDate;
@@ -49,72 +46,70 @@ public class ExpenseView {
     public VBox getView(Stage stage){
 
 
-
-        Label title =
-                new Label(
-                        "Add Expense"
-                );
-
-
+        // 1. Title Styling
+        Label title = new Label(
+                "Add Expense"
+        );
+        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
 
-        TextField amountField =
-                new TextField();
+        // 2. Input Fields Styling
+        String inputStyle = "-fx-font-size: 14px; -fx-padding: 10; -fx-background-radius: 5; -fx-border-color: #bdc3c7; -fx-border-radius: 5;";
 
 
+        TextField amountField = new TextField();
         amountField.setPromptText(
-                "Amount"
+                "Amount (e.g. 50)"
         );
+        amountField.setStyle(inputStyle);
+        amountField.setMaxWidth(350);
 
 
 
 
-        TextField categoryField =
-                new TextField();
-
-
+        TextField categoryField = new TextField();
         categoryField.setPromptText(
-                "Category"
+                "Category (Food, Rent, etc.)"
         );
+        categoryField.setStyle(inputStyle);
+        categoryField.setMaxWidth(350);
 
 
 
 
-        TextField descriptionField =
-                new TextField();
-
-
+        TextField descriptionField = new TextField();
         descriptionField.setPromptText(
-                "Description"
+                "Description (Optional)"
         );
+        descriptionField.setStyle(inputStyle);
+        descriptionField.setMaxWidth(350);
 
 
 
 
-        DatePicker datePicker =
-                new DatePicker();
-
-
+        DatePicker datePicker = new DatePicker();
         datePicker.setValue(
                 LocalDate.now()
         );
+        datePicker.setStyle("-fx-font-size: 14px;");
+        datePicker.setMaxWidth(350);
 
 
 
 
 
-        Label message =
-                new Label();
+        Label message = new Label();
 
 
 
 
 
-        Button saveButton =
-                new Button(
-                        "Save Expense"
-                );
-
+        // 3. Button Styling
+        Button saveButton = new Button(
+                "Save Expense"
+        );
+        // Using red for Expense to thematically contrast with the green used in IncomeView
+        saveButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-padding: 10 30; -fx-background-radius: 5; -fx-cursor: hand;");
 
 
 
@@ -133,6 +128,7 @@ public class ExpenseView {
                     message.setText(
                             "Please fill all required fields."
                     );
+                    message.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 14px; -fx-font-weight: bold;");
 
 
                     return;
@@ -154,6 +150,7 @@ public class ExpenseView {
                     message.setText(
                             "Amount must be greater than zero."
                     );
+                    message.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 14px; -fx-font-weight: bold;");
 
 
                     return;
@@ -204,6 +201,7 @@ public class ExpenseView {
                 message.setText(
                         "Expense saved successfully!"
                 );
+                message.setStyle("-fx-text-fill: #27ae60; -fx-font-size: 14px; -fx-font-weight: bold;");
 
 
 
@@ -212,6 +210,8 @@ public class ExpenseView {
                 categoryField.clear();
 
                 descriptionField.clear();
+
+                datePicker.setValue(LocalDate.now());
 
 
 
@@ -222,6 +222,7 @@ public class ExpenseView {
                 message.setText(
                         "Invalid expense data."
                 );
+                message.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 14px; -fx-font-weight: bold;");
 
 
             }
@@ -235,11 +236,10 @@ public class ExpenseView {
 
 
 
-        Button deleteButton =
-                new Button(
-                        "Delete Expense"
-                );
-
+        Button deleteButton = new Button(
+                "Delete Expense"
+        );
+        deleteButton.setStyle("-fx-background-color: #7f8c8d; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-padding: 10 30; -fx-background-radius: 5; -fx-cursor: hand;");
 
 
 
@@ -266,6 +266,7 @@ public class ExpenseView {
                 message.setText(
                         "Expense deleted successfully!"
                 );
+                message.setStyle("-fx-text-fill: #27ae60; -fx-font-size: 14px; -fx-font-weight: bold;");
 
 
 
@@ -276,6 +277,7 @@ public class ExpenseView {
                 message.setText(
                         "Invalid ID"
                 );
+                message.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 14px; -fx-font-weight: bold;");
 
 
             }
@@ -285,90 +287,35 @@ public class ExpenseView {
         });
 
 
+        // Group buttons horizontally
+        HBox buttonBox = new HBox(20, saveButton, deleteButton);
+        buttonBox.setAlignment(Pos.CENTER);
 
 
-
-
-
-        Button backButton =
-                new Button(
-                        "Back to Dashboard"
-                );
-
-
-
-
-
-        backButton.setOnAction(event -> {
-
-
-
-            DashboardView dashboardView =
-                    new DashboardView();
-
-
-            Scene scene =
-                    new Scene(
-                            dashboardView.getView(stage),
-                            700,
-                            500
-                    );
-
-
-            stage.setScene(scene);
-
-
-
-            stage.setScene(
-                    scene
-            );
-
-
-        });
-
-
-
-
-
-
-
-        VBox layout =
-                new VBox(
-
-                        15,
-
-                        title,
-
-                        amountField,
-
-                        categoryField,
-
-                        descriptionField,
-
-                        datePicker,
-
-                        saveButton,
-
-                        deleteButton,
-
-                        backButton,
-
-                        message
-
-                );
+        // 4. Layout Assembly (Removed Back Button)
+        VBox layout = new VBox(
+                20,
+                title,
+                amountField,
+                categoryField,
+                descriptionField,
+                datePicker,
+                buttonBox,
+                message
+        );
 
 
 
 
 
         layout.setPadding(
-                new Insets(20)
+                new Insets(40)
         );
 
 
 
         layout.setAlignment(
-                Pos.CENTER
+                Pos.TOP_CENTER
         );
 
 

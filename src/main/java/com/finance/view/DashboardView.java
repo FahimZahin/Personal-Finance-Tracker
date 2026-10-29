@@ -9,6 +9,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.Node;
 import javafx.stage.Stage;
 
 public class DashboardView {
@@ -23,54 +27,82 @@ public class DashboardView {
 
         int userId = Session.getUser().getId();
 
-        Label welcome = new Label("Welcome, " + Session.getUser().getUsername());
-        // Force text color to be visible
-        welcome.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        // Welcome Header
+        Label welcome = new Label("Welcome back, " + Session.getUser().getUsername() + " 👋");
+        welcome.setStyle("-fx-font-size: 26px; -fx-font-weight: bold;");
 
+        // Fetch Data
         double income = dashboardService.getTotalIncome(userId);
         double expense = dashboardService.getTotalExpense(userId);
         double balance = dashboardService.getBalance(userId);
         double savingsRate = dashboardService.getSavingsRate(userId);
         String topCategory = dashboardService.getTopExpenseCategory(userId);
 
-        Label savingsLabel = new Label("Savings Rate: " + String.format("%.2f%%", savingsRate));
-        savingsLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
+        // Metric Badges (Savings Rate & Top Expense)
+        Label savingsBadge = new Label("Savings Rate: " + String.format("%.2f%%", savingsRate));
+        savingsBadge.getStyleClass().add("info-pill"); // Let CSS handle the colors
 
-        Label topExpenseLabel = new Label(
+        Label topExpenseBadge = new Label(
                 (topCategory == null || topCategory.isEmpty())
                         ? "Top Expense: None"
                         : "Top Expense: " + topCategory
         );
-        topExpenseLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #34495e;");
+        topExpenseBadge.getStyleClass().add("info-pill"); // Let CSS handle the colors
 
-        DashboardChart dashboardChart = new DashboardChart();
-        BarChart<String, Number> chart = dashboardChart.createIncomeExpenseChart(income, expense);
-        // Lock chart dimensions so it doesn't stretch off the screen
-        chart.setPrefSize(500, 300);
-        chart.setMaxWidth(600);
+        HBox badges = new HBox(15, savingsBadge, topExpenseBadge);
+        badges.setAlignment(Pos.CENTER);
 
-        // Generate the styled cards (Green for income, Red for expense, Blue for balance)
+        // Stat Cards Generation
         StatCard card = new StatCard();
-        VBox incomeCard = card.create("Total Income", CurrencyManager.format(income), "#27ae60");
-        VBox expenseCard = card.create("Total Expense", CurrencyManager.format(expense), "#e74c3c");
-        VBox balanceCard = card.create("Balance", CurrencyManager.format(balance), "#2980b9");
+        VBox incomeCard = card.create("Total Income", CurrencyManager.format(income), "#10b981");
+        VBox expenseCard = card.create("Total Expense", CurrencyManager.format(expense), "#ef4444");
+        VBox balanceCard = card.create("Net Balance", CurrencyManager.format(balance), "#3b82f6");
 
-        // Use HBox to force them onto exactly one row
-        HBox cards = new HBox(20);
+        HBox cards = new HBox(20, incomeCard, expenseCard, balanceCard);
         cards.setAlignment(Pos.CENTER);
-        cards.getChildren().addAll(incomeCard, expenseCard, balanceCard);
 
-        VBox layout = new VBox(
-                25,
-                welcome,
-                cards,
-                savingsLabel,
-                topExpenseLabel,
-                chart
-        );
+        // --- Custom Modern Chart Setup ---
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Transaction Type");
+        yAxis.setLabel("Amount (" + CurrencyManager.getCurrency() + ")");
 
-        layout.setPadding(new Insets(20));
-        // Align TOP_CENTER so it anchors nicely to the top of the scroll pane
+        // Hardcoded text colors removed so CSS can target .axis, .axis-label, and .chart-title
+        BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
+        chart.setTitle("Income vs Expense Overview");
+        chart.setLegendVisible(false);
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        XYChart.Data<String, Number> incomeData = new XYChart.Data<>("Income", income);
+        XYChart.Data<String, Number> expenseData = new XYChart.Data<>("Expense", expense);
+
+        series.getData().add(incomeData);
+        series.getData().add(expenseData);
+        chart.getData().add(series);
+
+        // Apply distinct green/red colors once rendered
+        chart.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                Node b1 = incomeData.getNode();
+                if (b1 != null) b1.setStyle("-fx-bar-fill: #10b981; -fx-background-radius: 6 6 0 0;");
+                Node b2 = expenseData.getNode();
+                if (b2 != null) b2.setStyle("-fx-bar-fill: #ef4444; -fx-background-radius: 6 6 0 0;");
+            }
+        });
+
+        chart.setPrefSize(600, 320);
+        chart.setMaxWidth(680);
+
+        // Card wrapper for the chart (Hardcoded white background removed)
+        VBox chartCard = new VBox(chart);
+        chartCard.setAlignment(Pos.CENTER);
+        chartCard.setPadding(new Insets(15));
+        chartCard.getStyleClass().add("chart-card-container");
+        chartCard.setStyle("-fx-background-radius: 12px; -fx-border-radius: 12px; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.04), 12, 0, 0, 4);");
+
+        // Assembly
+        VBox layout = new VBox(25, welcome, cards, badges, chartCard);
+        layout.setPadding(new Insets(25, 40, 40, 40));
         layout.setAlignment(Pos.TOP_CENTER);
 
         return layout;

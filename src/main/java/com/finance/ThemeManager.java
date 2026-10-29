@@ -1,78 +1,34 @@
 package com.finance;
 
-
 import javafx.scene.Scene;
-
-
 
 public class ThemeManager {
 
+    // Default to light mode (false)
+    private static boolean isDarkMode = false;
 
-    private static boolean darkMode = false;
-
-
-
-    public static void setDarkMode(boolean value){
-
-        darkMode = value;
-
+    public static void setDarkMode(boolean dark) {
+        isDarkMode = dark;
     }
 
-
-
-    public static boolean isDarkMode(){
-
-        return darkMode;
-
+    public static boolean isDarkMode() {
+        return isDarkMode;
     }
 
+    public static void applyTheme(Scene scene) {
+        if (scene == null) return;
 
+        // Clear any old stylesheets
+        scene.getStylesheets().clear();
 
-    public static void applyTheme(Scene scene){
-
-
-        if(scene == null){
-
-            return;
-
+        // Load the appropriate CSS file based on the current mode
+        String stylesheet;
+        if (isDarkMode) {
+            stylesheet = ThemeManager.class.getResource("/dark-style.css").toExternalForm();
+        } else {
+            stylesheet = ThemeManager.class.getResource("/light-style.css").toExternalForm();
         }
 
-
-
-        scene.getStylesheets()
-                .removeIf(
-                        css ->
-                                css.contains("dark.css")
-                );
-
-
-
-        if(darkMode){
-
-
-            var resource =
-                    ThemeManager.class
-                            .getResource("/dark.css");
-
-
-
-            if(resource != null){
-
-
-                scene.getStylesheets()
-                        .add(
-                                resource.toExternalForm()
-                        );
-
-
-            }
-
-
-        }
-
-
+        scene.getStylesheets().add(stylesheet);
     }
-
-
-
 }

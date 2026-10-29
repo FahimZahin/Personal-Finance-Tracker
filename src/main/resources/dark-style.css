@@ -1,0 +1,304 @@
+.root {
+    -fx-font-family: "Segoe UI";
+    -fx-background-color: #1a1a1a; /* Dark background */
+}
+
+/* Global Text to White */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #f8fafc !important;
+}
+
+.button {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px 18px;
+    -fx-background-radius: 8px;
+}
+
+.button:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+.text-field, .password-field, .combo-box {
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-background-radius: 8px;
+    -fx-background-color: #2d2d2d;
+    -fx-text-fill: white;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    -fx-background-color: #111827;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-alignment: center-left;
+    -fx-padding: 10 20;
+    -fx-min-width: 160px;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover {
+    -fx-background-color: #1f2937;
+    -fx-background-radius: 5px;
+}
+
+/* Dark Mode: Dashboard Cards */
+.stat-card {
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: #334155;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 15, 0, 0, 5);
+    -fx-transition: -fx-background-color 0.2s, -fx-border-color 0.2s;
+    -fx-padding: 20px;
+}
+
+.stat-card:hover {
+    -fx-background-color: #273548;
+    -fx-border-color: #475569;
+    -fx-cursor: hand;
+}
+
+.stat-card-title {
+    -fx-font-size: 11px;
+    -fx-text-fill: #94a3b8 !important;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+}
+
+.stat-card-value {
+    -fx-text-fill: #f8fafc;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* Dark Mode: Table View */
+.table-view {
+    -fx-background-radius: 10px;
+    -fx-border-color: #475569;
+    -fx-border-radius: 5px;
+    -fx-background-color: #1e293b;
+}
+
+.table-column {
+    -fx-alignment: CENTER;
+}
+
+.table-cell {
+    -fx-font-size: 13px;
+    -fx-alignment: center;
+    -fx-text-fill: #f8fafc;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #2b3035;
+}
+
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-size: 35px;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #ffffff !important;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: #1e293b;
+}
+
+.table-view .table-row-cell:hover {
+    -fx-background-color: #334155;
+    -fx-cursor: hand;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #3498db;
+}
+
+.table-view .table-row-cell:selected .text {
+    -fx-fill: white;
+}
+/* Dark Mode Chart Integration */
+.chart {
+    -fx-padding: 10px;
+}
+
+/* Make the chart background transparent to match the dark app background */
+.chart-plot-background,
+.chart-content {
+    -fx-background-color: transparent;
+}
+
+/* Force chart titles and numbers to white */
+.chart-title,
+.axis-label,
+.axis {
+    -fx-text-fill: #f8fafc !important;
+    -fx-tick-label-fill: #f8fafc !important;
+}
+
+/* Make the grid lines subtle */
+.chart-vertical-grid-lines,
+.chart-horizontal-grid-lines {
+    -fx-stroke: #334155;
+}
+
+/* Dark Mode Info Pills */
+.info-pill {
+    -fx-background-color: #1e293b; /* Dark card background */
+    -fx-text-fill: #38bdf8 !important; /* Bright blue readable text */
+    -fx-background-radius: 20px;
+    -fx-padding: 8px 16px;
+    -fx-font-weight: bold;
+    -fx-border-color: #334155;
+    -fx-border-radius: 20px;
+}
+
+/* ========================================================
+   DARK MODE CONTROL FIXES (SEARCH FIELD & COMBOBOX)
+   ======================================================== */
+
+/* Search / Text Field - White Background with Clear Dark Text */
+.text-field {
+    -fx-background-color: #ffffff !important;
+    -fx-text-fill: #1e293b !important;
+    -fx-prompt-text-fill: #94a3b8 !important;
+    -fx-border-color: #cbd5e1 !important;
+    -fx-border-radius: 6px !important;
+    -fx-background-radius: 6px !important;
+    -fx-padding: 8px 12px !important;
+    -fx-font-size: 14px !important;
+}
+
+/* ComboBox - White Container to Match Light Mode */
+.combo-box {
+    -fx-background-color: #ffffff !important;
+    -fx-border-color: #cbd5e1 !important;
+    -fx-border-radius: 6px !important;
+    -fx-background-radius: 6px !important;
+    -fx-padding: 2px 8px !important;
+    -fx-min-width: 120px !important; /* Increased from 100px to give the year more room */
+}
+
+/* Selected Text inside ComboBox */
+.combo-box .list-cell {
+    -fx-background-color: transparent !important;
+    -fx-text-fill: #1e293b !important;
+    /*-fx-font-weight: bold;*/
+}
+
+/* Dark Arrow Icon on White Background */
+.combo-box .arrow,
+.combo-box .arrow-button .arrow {
+    -fx-background-color: #334155 !important;
+}
+
+/* Popup List when clicked */
+.combo-box-popup .list-view {
+    -fx-background-color: #ffffff !important;
+    -fx-border-color: #cbd5e1 !important;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 10, 0, 0, 4);
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: #ffffff !important;
+    -fx-text-fill: #1e293b !important;
+}
+
+.combo-box-popup .list-cell:hover,
+.combo-box-popup .list-cell:filled:selected {
+    -fx-background-color: #2563eb !important;
+    -fx-text-fill: #ffffff !important;
+}
+
+/* ========================================================
+   DARK MODE DATEPICKER / CALENDAR POPUP
+   ======================================================== */
+
+/* Main popup container */
+.date-picker-popup {
+    -fx-background-color: #1e293b !important;
+    -fx-border-color: #475569 !important;
+}
+
+/* Header with Month and Year */
+.date-picker-popup .month-year-pane {
+    -fx-background-color: #1e293b !important;
+}
+
+.date-picker-popup .month-year-pane .label {
+    -fx-text-fill: #f8fafc !important;
+    -fx-font-weight: bold;
+}
+
+/* Next/Previous Month Arrows */
+.date-picker-popup .spinner .button {
+    -fx-background-color: transparent !important;
+    -fx-cursor: hand;
+}
+
+.date-picker-popup .spinner .button:hover {
+    -fx-background-color: #334155 !important;
+}
+
+.date-picker-popup .spinner .button .left-arrow,
+.date-picker-popup .spinner .button .right-arrow {
+    -fx-background-color: #f8fafc !important;
+}
+
+/* Day Names (Sun, Mon, Tue, etc.) */
+.date-picker-popup .day-name-cell {
+    -fx-text-fill: #94a3b8 !important;
+    -fx-font-weight: bold;
+}
+
+/* Background of the calendar grid */
+.date-picker-popup .calendar-grid {
+    -fx-background-color: #1e293b !important;
+}
+
+/* Individual Day Numbers */
+.date-picker-popup .day-cell {
+    -fx-background-color: #1e293b !important;
+    -fx-text-fill: #f8fafc !important;
+}
+
+/* Hovering over a day */
+.date-picker-popup .day-cell:hover {
+    -fx-background-color: #334155 !important;
+    -fx-cursor: hand;
+}
+
+/* The currently selected day */
+.date-picker-popup .selected,
+.date-picker-popup .selected:hover {
+    -fx-background-color: #3b82f6 !important;
+    -fx-text-fill: #ffffff !important;
+    -fx-font-weight: bold;
+}
+
+/* Today's date */
+.date-picker-popup .today {
+    -fx-background-color: #0f172a !important;
+    -fx-text-fill: #38bdf8 !important;
+    -fx-border-color: #38bdf8 !important;
+    -fx-border-width: 1px;
+}
+
+/* Dim out days from the previous and next months */
+.date-picker-popup .day-cell.previous-month,
+.date-picker-popup .day-cell.next-month {
+    -fx-text-fill: #475569 !important;
+}
