@@ -18,6 +18,7 @@ public class MainLayout {
     private final BorderPane root;
     private final VBox contentArea;
     private final Stage stage;
+    private final Button[] navButtons; // Array to hold navigation buttons for state updates
 
     public MainLayout(Stage stage) {
         this.stage = stage;
@@ -27,7 +28,6 @@ public class MainLayout {
         contentArea.setPadding(new Insets(20));
         contentArea.setStyle("-fx-background-color: transparent;");
 
-        // FIX: Wrap the center content in a ScrollPane to prevent right-side cutoff
         ScrollPane scrollPane = new ScrollPane(contentArea);
         scrollPane.setFitToWidth(true);
         scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
@@ -46,31 +46,57 @@ public class MainLayout {
         Button reportBtn = new Button("Monthly Report");
         Button settingsBtn = new Button("Settings");
 
-        // Spacer to push the Logout button to the very bottom of the sidebar
+        // Spacer to push the Logout button to the very bottom
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
         Button logoutBtn = new Button("Logout");
 
-        // Apply CSS classes and make buttons fill the width
-        Button[] navButtons = {dashBtn, incBtn, expBtn, transBtn, reportBtn, settingsBtn, logoutBtn};
+        navButtons = new Button[]{dashBtn, incBtn, expBtn, transBtn, reportBtn, settingsBtn};
         for (Button btn : navButtons) {
             btn.getStyleClass().add("nav-button");
             btn.setMaxWidth(Double.MAX_VALUE);
         }
+        logoutBtn.getStyleClass().add("nav-button");
+        logoutBtn.setMaxWidth(Double.MAX_VALUE);
 
         sidebar.getChildren().addAll(
                 dashBtn, incBtn, expBtn, transBtn, reportBtn, settingsBtn, spacer, logoutBtn
         );
 
-        // Navigation Logic
-        dashBtn.setOnAction(e -> setContent(new DashboardView().getView(this.stage)));
-        incBtn.setOnAction(e -> setContent(new IncomeView().getView(this.stage)));
-        expBtn.setOnAction(e -> setContent(new ExpenseView().getView(this.stage)));
-        transBtn.setOnAction(e -> setContent(new TransactionView().getView(this.stage)));
-        reportBtn.setOnAction(e -> setContent(new ReportView().getView(this.stage)));
-        settingsBtn.setOnAction(e -> setContent(new SettingsView().getView(this.stage)));
+        // Set Dashboard as visually active by default when logging in
+        setActiveButton(dashBtn);
 
-        // FIX: Re-integrated Logout Logic
+        // Navigation Logic - Now updates the content AND the active button style
+        dashBtn.setOnAction(e -> {
+            setContent(new DashboardView().getView(this.stage));
+            setActiveButton(dashBtn);
+        });
+
+        incBtn.setOnAction(e -> {
+            setContent(new IncomeView().getView(this.stage));
+            setActiveButton(incBtn);
+        });
+
+        expBtn.setOnAction(e -> {
+            setContent(new ExpenseView().getView(this.stage));
+            setActiveButton(expBtn);
+        });
+
+        transBtn.setOnAction(e -> {
+            setContent(new TransactionView().getView(this.stage));
+            setActiveButton(transBtn);
+        });
+
+        reportBtn.setOnAction(e -> {
+            setContent(new ReportView().getView(this.stage));
+            setActiveButton(reportBtn);
+        });
+
+        settingsBtn.setOnAction(e -> {
+            setContent(new SettingsView().getView(this.stage));
+            setActiveButton(settingsBtn);
+        });
+
         logoutBtn.setOnAction(e -> {
             Session.clear();
             Scene loginScene = new Scene(new LoginView().getView(this.stage), AppConstants.WIDTH, AppConstants.HEIGHT);
@@ -83,6 +109,26 @@ public class MainLayout {
 
         root.setLeft(sidebar);
         root.setCenter(scrollPane);
+    }
+
+    /**
+     * Highlights the clicked button and removes highlighting from all others.
+     */
+    private void setActiveButton(Button activeBtn) {
+        // 1. Clear inline styles from all buttons so they return to normal CSS
+        for (Button btn : navButtons) {
+            btn.setStyle("");
+        }
+
+        // 2. Apply a distinct inline style to the active button (blue border left + darker background)
+        if (activeBtn != null) {
+            activeBtn.setStyle(
+                    "-fx-background-color: #34495e; " +
+                            "-fx-border-color: #3498db; " +
+                            "-fx-border-width: 0 0 0 4; " +
+                            "-fx-font-weight: bold;"
+            );
+        }
     }
 
     public void setContent(Node node) {
